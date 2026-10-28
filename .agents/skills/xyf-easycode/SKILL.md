@@ -17,6 +17,7 @@ Paths are relative to this installed skill directory. Keep the entire bundle tog
 | --- | --- | --- |
 | brainstorming | Agree on requirements and design | [SKILL.md](subskills/brainstorming/SKILL.md) |
 | xyf-archify | Maintain architecture and deploy its editor | [SKILL.md](subskills/xyf-archify/SKILL.md) |
+| xyf-web-language | Translate webpage tools while preserving English names | [SKILL.md](subskills/xyf-web-language/SKILL.md) |
 | xyf-code | Implement, test, verify documents, review, and repair | [SKILL.md](subskills/xyf-code/SKILL.md) |
 | xyf-archifycheck | Read-only document/code comparison | [SKILL.md](subskills/xyf-archifycheck/SKILL.md) |
 | review-agent | Read-only review of new defects in a change | [SKILL.md](subskills/review-agent/SKILL.md) |
@@ -24,6 +25,8 @@ Paths are relative to this installed skill directory. Keep the entire bundle tog
 ## Choose the route
 
 Establish the actual project, desired result, scope, artifacts, and existing authorization. Default to the current project; read its collaboration rules. Explain the start, finish, and reason in a short table. Ask only for missing essential information. Existing files alone do not prove prior stages are complete. Reuse valid confirmations; resolve missing prerequisites and obtain required write/scope authorization.
+
+For a task that creates and deploys a new architecture webpage, ask **"Which language should the architecture webpage use?"** as the first user question, before requirements or scope questions. Ask in the conversation language, accept any natural language, and wait for the answer. Reuse a language explicitly supplied for this task; do not silently choose one. Pass it through brainstorming and architecture generation for display names and descriptive content. Before deployment, invoke [xyf-web-language](subskills/xyf-web-language/SKILL.md) to translate the installed `tools/` sources, preserve English names, rebuild and verify the editor. An explicit webpage-language change also routes there. Existing-page maintenance retains its recorded language unless a change is requested; unrelated coding/checking tasks do not need this question.
 
 | Stage | Action and result |
 | --- | --- |

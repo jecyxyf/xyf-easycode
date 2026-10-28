@@ -75,7 +75,7 @@ The bundled editor runs locally with Node.js. The agent deploys it when architec
 - The deployed `ReadMe.md` records the actual local URL, random five-digit port, and restart command.
 - Save / Ctrl+S writes to the same JSON. Save As downloads a copy. An HTML snapshot shares a view without saving the configuration.
 - External changes are detected; conflicting unsaved edits are preserved and reported.
-- English is the default for repository documentation and editor controls. Users can enter architecture content in their preferred language.
+- Before creating a new architecture webpage, the skill first asks which language to use. The bundled `xyf-web-language` skill translates `tools/` before deployment, preserving English names. Any natural language can be requested; new architecture descriptions follow that choice. Existing project data is translated only when requested.
 - The optional Chinese-to-English name translation button sends the selected name to MyMemory. Ordinary local editing and saving do not use that service.
 
 See the [editor documentation](.agents/skills/xyf-easycode/tools/README.md) for deployment commands.

@@ -9,6 +9,8 @@ Understand -> execute -> check: establish evidence/scope, verify content, lay ou
 
 ## Establish the evidence
 
+For a new architecture webpage that will be deployed, the first user question must be **"Which language should the architecture webpage use?"**, asked in the conversation language before other requirements/scope questions. Accept any natural language and wait for the answer. Reuse an explicit answer passed by the entry skill or already supplied for this task; do not ask twice or infer a language from the current templates. Carry the answer into new architecture display names and descriptive content, and invoke [xyf-web-language](../xyf-web-language/SKILL.md) before deployment. Data-only work does not require a webpage-language question. Existing-page maintenance follows the page's recorded language unless the user requests a change.
+
 Identify the actual project, requested scope, current configuration and authorization; read project rules and reuse valid session decisions. Preserve stable IDs, user changes, layout and out-of-scope content. Resolve known unsaved webpage edits before replacing data. Do not overwrite current data with a stale snapshot or tool template, or treat an empty file in a new directory as the existing baseline.
 
 | Project | Required evidence |
@@ -53,7 +55,7 @@ Every formal item must match confirmed design or actual source. Resolve doubts b
 - `modified`: verified content changed semantically; reverify for delivery or confirm it as planned design. A status edit cannot replace verification.
 - All formal methods require complete checked inputs/outputs and both confirmation flags true. Empty arrays mean confirmed absence only.
 
-Understand responsibilities and real relationships first, then choose modules/layers, then layout. Do not map one file/function mechanically to one module or preselect fixed counts. Preserve actual code identifiers in source mode. Use the user's requested language for project content; shipped editor controls default to English.
+Understand responsibilities and real relationships first, then choose modules/layers, then layout. Do not map one file/function mechanically to one module or preselect fixed counts. Preserve actual code identifiers in source mode. Use the selected webpage language for new display names and descriptive content; keep English names in English. The editor's visible controls and default content must use the same language after xyf-web-language completes.
 
 For every scoped module cover all names/purpose/language/code locations/group; requirements and important conditions; explicit `dependencies` string array (one confirmed requirement per entry, [] only for confirmed absence); public parameters including types/defaults/required flags; structures and every field; every `interfaces` method including purpose, all inputs/outputs, multiline flow/errors; events including direction/payload/flow; test steps/outcomes; actual sources and status. Do not sample a few representative methods. Source mode records existing test meanings, design mode confirmed acceptance tests. Do not create/run business tests.
 
@@ -74,6 +76,7 @@ Check source -> architecture omissions and architecture -> evidence for every it
 After complete configuration validation, deploy unless the user requested data only. Configuration-only maintenance does not require redeploying programs or rebuilding the entry.
 
 1. Inspect the actual deployment, preserving existing JSON and webpage customization.
+   For a new page, use the language obtained by the first question and complete [xyf-web-language](../xyf-web-language/SKILL.md) on the installed `tools/` before running the deployment command. Pass the selected language and actual tools path; wait for its rebuilt/verified result. Read an existing page's `<html lang>` marker before maintenance or regeneration and ensure the tools match that language. Do not overwrite an existing translated page with tools in another language.
 2. From the installed skill root:
 
    ```sh

@@ -4,6 +4,8 @@ Requires **Node.js 22+**. No npm dependencies or `npm install` are needed. Check
 
 ## Deploy and access
 
+When creating a new architecture webpage through the skill, its first user question is which language the page should use. Accept any natural language. Before deployment, run the bundled [xyf-web-language skill](../subskills/xyf-web-language/SKILL.md) on this `tools/` directory to translate source text, preserve English names, rebuild the editor and verify it. Existing pages retain their `<html lang>` language unless the user requests a change; match that language before rebuilding/redeploying. The deployment script uses these tools as they currently exist; it does not ask or translate by itself.
+
 Run from this `tools/` directory:
 
 ```sh
@@ -44,7 +46,7 @@ Preserve existing target JSON. Without source/existing data, the tool creates an
 | HTML snapshot | Share a standalone view, without saving configuration |
 | Failure/conflict | Preserve edits and explain the error |
 
-External changes are checked about every two seconds. Clean pages reload; dirty edits/open dialogs are preserved with a notice. Background pages may poll later. Version checks are not cross-process locks. The optional Chinese-to-English name button sends the selected name to MyMemory; normal local editing/saving needs no external service. English defaults do not translate user-supplied project data.
+External changes are checked about every two seconds. Clean pages reload; dirty edits/open dialogs are preserved with a notice. Background pages may poll later. Version checks are not cross-process locks. The optional Chinese-to-English name button sends the selected name to MyMemory; normal local editing/saving needs no external service. Webpage translation uses xyf-web-language; it does not automatically translate existing project data.
 
 ## Maintain
 
