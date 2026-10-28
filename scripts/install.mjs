@@ -68,7 +68,7 @@ export async function validateBundle(directory) {
   const entry = await readFile(join(directory, 'SKILL.md'), 'utf8');
   if (!/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/.test(entry) || !/^name:\s*xyf-easycode\s*$/m.test(entry)) throw new Error('The source is not the xyf-easycode skill.');
   const required = [
-    'subskills/brainstorming/SKILL.md', 'subskills/xyf-archify/SKILL.md', 'subskills/xyf-code/SKILL.md',
+    'subskills/xyf-archify/SKILL.md', 'subskills/xyf-code/SKILL.md',
     'subskills/xyf-archifycheck/SKILL.md', 'subskills/review-agent/SKILL.md', 'subskills/xyf-web-language/SKILL.md',
     'tools/index.html', 'tools/archify.json', 'tools/html/server.mjs',
     ...['deploy', 'build', 'check', 'files'].map(name => `tools/html/scripts/${name}.mjs`),
