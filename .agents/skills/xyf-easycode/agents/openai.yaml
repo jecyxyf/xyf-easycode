@@ -1,0 +1,4 @@
+interface:
+  display_name: "XYF EasyCode"
+  short_description: "Keep AI coding aligned with visual architecture"
+  default_prompt: "Use $xyf-easycode to visualize architecture and interfaces, then implement my agreed requirements."

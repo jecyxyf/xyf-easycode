@@ -1,0 +1,19 @@
+<!-- Module guide. Nodes are created from this template by nodes.js. Stable module IDs survive renames. Header dragging moves the node; dynamic content includes purpose, dependencies, parameters, structures, methods, events and tests. Four connection buttons use top/right/bottom/left ports. Names are assigned through textContent, never interpreted as markup. Keep template ID/classes/data attributes synchronized with app.js, nodes.js, canvas.js and CSS. -->
+<template id="ec-module-template">
+  <article class="module-node" tabindex="0">
+    <div class="module-shell">
+      <header class="module-header">
+        <span class="node-emblem" aria-hidden="true"></span>
+        <div class="module-heading"><h2 class="module-name"></h2><span class="module-language" hidden></span></div>
+        <div class="module-header-actions">
+          <button type="button" class="module-more" data-node-action="edit" data-icon="more" aria-label="Edit module" title="Edit module"></button>
+        </div>
+      </header>
+      <div class="module-content"></div>
+    </div>
+    <button type="button" class="module-port port-top" data-port="top" aria-label="Top connection" title="Top connection: drag this dot to a dot on another module"></button>
+    <button type="button" class="module-port port-right" data-port="right" aria-label="Right connection" title="Right connection: drag this dot to a dot on another module"></button>
+    <button type="button" class="module-port port-bottom" data-port="bottom" aria-label="Bottom connection" title="Bottom connection: drag this dot to a dot on another module"></button>
+    <button type="button" class="module-port port-left" data-port="left" aria-label="Left connection" title="Left connection: drag this dot to a dot on another module"></button>
+  </article>
+</template>

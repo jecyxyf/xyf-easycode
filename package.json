@@ -1,0 +1,15 @@
+{
+  "name": "xyf-easycode",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Visualize architecture and interfaces to keep AI coding aligned with user requirements.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/test.mjs",
+    "build": "node .agents/skills/xyf-easycode/tools/html/scripts/build.mjs --runtime",
+    "install-skill": "node scripts/install.mjs"
+  },
+  "repository": { "type": "git", "url": "https://github.com/jecyxyf/xyf-easycode.git" }
+}

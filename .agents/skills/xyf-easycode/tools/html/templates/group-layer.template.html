@@ -1,0 +1,10 @@
+<!-- Layer guide. canvas.js computes the frame from its member modules; an empty layer uses its saved x/y. Drag the header to move contained modules together. name is the display label, englishName the code identifier, color the heading foreground and backgroundColor a six-digit RGB background at fixed 50% opacity. The empty hint appears only without members. Preserve IDs and template hooks. -->
+<template id="ec-group-template">
+  <section class="group-frame">
+    <header class="group-header">
+      <span class="group-title"></span>
+      <button type="button" data-group-action="edit" data-icon="more" aria-label="Edit group" title="Edit group"></button>
+    </header>
+    <span class="group-empty">Edit a module and assign it to this layer</span>
+  </section>
+</template>

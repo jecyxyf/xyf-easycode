@@ -1,0 +1,41 @@
+<!-- Canvas guide. Runtime placeholders EC:TITLE, STYLE, NODE, GROUP, DATA, BUNDLE and RUNTIME are assembled by serialization.js. Keep element IDs, data-action and data-icon values synchronized with app.js and editor.css. Service entries load JSON over HTTP; only snapshots embed ec-project data. The world holds layers, arrows and modules; viewport/zoom controls preserve the view. Feedback and dialogs must retain accessible labels. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><!--EC:TITLE--></title>
+  <!--EC:STYLE-->
+</head>
+<body>
+  <header class="toolbar">
+    <button type="button" class="project-heading" data-action="edit-project" aria-label="Edit title and description" aria-haspopup="dialog"><span class="brand-mark" aria-hidden="true">◇</span><span><strong id="ec-project-name">Software architecture</strong><small id="ec-project-description"></small></span></button>
+    <nav class="toolbar-actions" aria-label="Canvas controls">
+      <button type="button" data-action="add-module" data-icon="module-add" aria-label="New module" title="New module"></button>
+      <button type="button" data-action="add-group" data-icon="group-add" aria-label="New layer" title="New layer"></button>
+      <span class="toolbar-separator" aria-hidden="true"></span>
+      <button type="button" data-action="save" data-icon="save" aria-label="Save" title="Save (Ctrl / ⌘ + S)"></button>
+      <button type="button" data-action="import" data-icon="import" aria-label="Import" title="Import HTML"></button>
+      <button type="button" data-action="export" data-icon="export" aria-label="Export" title="Export HTML (Ctrl / ⌘ + Shift + S)"></button>
+      <button id="ec-export-html" type="button" data-action="export-html" aria-label="Export HTML Snapshot" title="Export HTML  snapshot; configuration is not saved" hidden>HTML Snapshot</button>
+    </nav>
+  </header>
+  <main id="ec-viewport" aria-label="Module editing canvas" tabindex="0">
+    <div id="ec-world"><div id="ec-groups"></div><svg id="ec-edges" aria-label="Module relations"></svg><div id="ec-nodes"></div></div>
+    <div id="ec-connection-hint" class="connection-hint" role="status" aria-live="polite" hidden></div>
+    <div id="ec-empty" hidden>Start with a module<button type="button" data-action="add-module" data-icon="module-add" aria-label="New module" title="New module"></button></div>
+    <section id="ec-open-project" class="open-project" aria-label="Open architecture" hidden><h1>Load architecture configuration</h1><p id="ec-open-message">Open  ReadMe.md  and open the URL listed there.<br>You can also select it manually:  archify.json.</p><button type="button" class="primary" data-action="import">Load configuration</button><small>Node  automatically loads and saves the configuration.</small></section>
+  </main>
+  <footer class="statusbar">
+    <output id="ec-file-status" role="status" aria-live="polite"></output>
+    <div class="zoom-controls"><button type="button" data-action="zoom-out" data-icon="zoom-out" aria-label="Zoom out" title="Zoom out"></button><output id="ec-zoom">100%</output><button type="button" data-action="zoom-in" data-icon="zoom-in" aria-label="Zoom in" title="Zoom in"></button><button type="button" data-action="fit" data-icon="fit" aria-label="Fit to view" title="Fit to view"></button></div>
+  </footer>
+  <aside id="ec-feedback" aria-label="Project notices"><div id="ec-notice" role="alert" hidden></div><div id="ec-warnings" role="status" aria-live="polite" hidden><span id="ec-warning-text"></span><button id="ec-warning-close" type="button" data-icon="close" aria-label="Dismiss incomplete-item notice" title="Dismiss incomplete-item notice"></button></div></aside>
+  <dialog id="ec-dialog" aria-labelledby="ec-dialog-title"></dialog>
+  <!--EC:NODE-->
+  <!--EC:GROUP-->
+  <!--EC:DATA-->
+  <!--EC:BUNDLE-->
+  <!--EC:RUNTIME-->
+</body>
+</html>

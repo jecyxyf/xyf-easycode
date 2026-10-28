@@ -1,0 +1,22 @@
+{
+  "formatVersion": 1,
+  "id": "project-template",
+  "name": "Software architecture",
+  "englishName": "new-project",
+  "description": "Describe the project purpose",
+  "repository": {
+    "path": "",
+    "revision": "",
+    "dirty": false
+  },
+  "groups": [],
+  "modules": [],
+  "relations": [],
+  "view": {
+    "x": 0,
+    "y": 0,
+    "scale": 1,
+    "expanded": [],
+    "expandedInterfaces": []
+  }
+}
