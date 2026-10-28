@@ -71,7 +71,7 @@ You can request one stage: visualize an existing codebase, update architecture, 
 
 The bundled editor runs locally with Node.js. The agent deploys it when architecture work is requested. Its JSON is the shared agreement between the user and agent.
 
-- Default configuration: `docs/archfiy/archify.json`. The spelling `archfiy` is retained for compatibility. Existing projects using `docs/archify/` keep that location.
+- Default configuration: `docs/archify/archify.json`. Existing or user-specified architecture directories keep their location.
 - The deployed `ReadMe.md` records the actual local URL, random five-digit port, and restart command.
 - Save / Ctrl+S writes to the same JSON. Save As downloads a copy. An HTML snapshot shares a view without saving the configuration.
 - External changes are detected; conflicting unsaved edits are preserved and reported.
@@ -87,8 +87,10 @@ See the [editor documentation](.agents/skills/xyf-easycode/tools/README.md) for 
   SKILL.md                   Workflow and routing
   subskills/                 Design, architecture, coding, checks, review
   tools/                     Editor, data model, server and deployment
+  tests/editor.test.mjs       Editor regression tests
 scripts/install.mjs          Cross-platform installer
 scripts/check.mjs            Bundle and repository checks
+scripts/tests/               Installer regression tests
 INSTALL.md                   Agent-facing installation procedure
 README.zh-CN.md              Chinese project documentation
 ```
@@ -101,6 +103,6 @@ npm test
 npm run build
 ```
 
-Checks validate the bundle, local documentation links, data format, and JavaScript syntax. Tests exercise installation, updates, editor deployment, loading, saving, and conflicts. Tests and temporary files stay under `docs/archify/test/`; temporary output is ignored by Git. Browser checks are reported separately from API tests.
+Checks validate the bundle, local documentation links, data format, and JavaScript syntax. Installer tests live in `scripts/tests/installer.test.mjs`; editor tests ship with the skill in `.agents/skills/xyf-easycode/tests/editor.test.mjs`. They exercise installation, updates, editor deployment, loading, saving, and conflicts. `npm test` runs from `docs/archify/test/`, with temporary files under its ignored `.runtime/` directory. Browser checks are reported separately from API tests.
 
 Installation paths follow the official [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills), and [OpenCode](https://opencode.ai/docs/skills/) documentation.

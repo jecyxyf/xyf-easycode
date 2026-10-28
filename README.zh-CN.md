@@ -67,7 +67,7 @@ node scripts/install.mjs --agent codex --project /你的项目路径
 
 编辑器使用 Node.js 在本机运行，由 Agent 在处理架构任务时部署到目标项目。JSON 是用户和 Agent 共用的实现依据。
 
-- 默认配置位置为 `docs/archfiy/archify.json`。保留 `archfiy` 的原有拼写；旧项目使用 `docs/archify/` 时继续沿用。
+- 默认配置位置为 `docs/archify/archify.json`。已有或用户指定的架构目录继续沿用。
 - 部署后的 `ReadMe.md` 记录实际访问地址、五位数随机端口和重启命令。
 - 保存或 Ctrl+S 写回同一个 JSON；另存为下载副本；HTML 快照用于分享，不代表配置已保存。
 - 检测外部修改，发生冲突时保留未保存内容并提示。
@@ -84,4 +84,4 @@ npm test
 npm run build
 ```
 
-检查技能文件、内部链接、配置格式和 JavaScript 语法。测试覆盖实际安装、更新保护，以及网页服务的部署、加载、保存和冲突处理。测试及临时文件放在 `docs/archify/test/` 下，临时产物不进入 Git。实际浏览器检查与接口测试分别报告。
+检查技能文件、内部链接、配置格式和 JavaScript 语法。安装器测试位于 `scripts/tests/installer.test.mjs`；编辑器测试位于 `.agents/skills/xyf-easycode/tests/editor.test.mjs`，随技能分发。测试覆盖实际安装、更新保护，以及网页服务的部署、加载、保存和冲突处理。`npm test` 的运行目录为 `docs/archify/test/`，临时文件位于其中的 `.runtime/`，不进入 Git。实际浏览器检查与接口测试分别报告。

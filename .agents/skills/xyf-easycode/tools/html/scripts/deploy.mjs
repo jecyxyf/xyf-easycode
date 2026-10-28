@@ -8,7 +8,7 @@ import {check,checkService} from './check.mjs';
 import {validPort,writeReadme} from '../server.mjs';
 
 const sourceRoot = fileURLToPath(new URL('../../',import.meta.url));
-export async function deploy(projectRoot,{sourceFile,outputDir = 'docs/archfiy',mode = 'service'} = {}) {
+export async function deploy(projectRoot,{sourceFile,outputDir = 'docs/archify',mode = 'service'} = {}) {
   if (!['local','service'].includes(mode)) throw new Error('Deployment mode must be  local  or  service。');
   projectRoot = resolve(projectRoot);
   const inside = (parent,child) => {const path = relative(parent,child); return path === '' || path !== '..' && !path.startsWith('..' + sep) && !isAbsolute(path);};

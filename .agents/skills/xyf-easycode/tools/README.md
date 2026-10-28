@@ -12,10 +12,10 @@ Run from this `tools/` directory:
 node html/scripts/deploy.mjs "<project-root>" --source-file "<verified-archify.json>"
 ```
 
-Default output: `<project>/docs/archfiy/` (intentional compatibility spelling). User paths and existing `docs/archify/` deployments take precedence.
+Default output: `<project>/docs/archify/`. User paths and existing deployment directories take precedence.
 
 ```text
-docs/archfiy/
+docs/archify/
   index.html    Editor with scripts, styles and templates embedded
   archify.json  Single current configuration
   ReadMe.md     Actual live URL, port and restart command
@@ -26,7 +26,7 @@ The local HTTP server picks an available random five-digit port in 10000-65535 a
 
 | Option | Purpose |
 | --- | --- |
-| `--output-dir docs/archfiy` | Project-relative deployment directory |
+| `--output-dir docs/archify` | Project-relative deployment directory |
 | `--source-file <JSON>` | Verified source; stop if target data differs |
 | `--port <five-digit-port>` | Explicit instead of random port |
 | `--no-start` | Generate files without claiming a live server |
