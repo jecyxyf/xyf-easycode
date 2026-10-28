@@ -1,40 +1,40 @@
 ---
 name: xyf-web-language
-description: Translate EasyCode's bundled architecture webpage tools into any user-specified natural language while preserving English names and code identifiers. Use before deploying a new architecture webpage or when asked to change its language.
+description: 将 EasyCode 架构网页工具中的文字翻译为用户指定的任意自然语言，保留英文名称、代码标识及原有样式和布局。用于新架构网页部署前或用户要求切换网页语言时。
 ---
 
-# XYF Web Language
+# XYF 网页语言
 
-Translate the actual installed EasyCode [tools directory](../../tools/README.md). Resolve `../../tools/` relative to this skill directory; do not hard-code the author's checkout path. This changes the shared templates used by subsequent deployments. Use an explicitly supplied tools copy for isolated checks. Deployment itself remains the responsibility of [xyf-archify](../xyf-archify/SKILL.md).
+翻译实际安装的 EasyCode [tools 目录](../../tools/README.md)。以本技能目录为起点解析 `../../tools/`，不得写死作者的本地仓库路径。这会修改后续部署使用的共享模板。进行隔离检查时，使用明确指定的工具副本。部署本身仍由 [xyf-archify](../xyf-archify/SKILL.md) 负责。
 
-## Select the language
+## 选择语言
 
-For a new architecture webpage, the first user question is: **"Which language should the architecture webpage use?"** Ask in the user's conversation language. Accept any natural language, not a fixed list. Reuse a language explicitly supplied for this task; do not infer it from the conversation, browser, operating system, or current template. Wait for the answer before translation, architecture generation, or deployment. Do not ask again when the calling skill already obtained the answer.
+新建架构网页时，第一个向用户提出的问题是：**“架构网页使用什么语言？”** 用当前对话的语言提问。接受任意自然语言，不限制为固定列表。若用户已经明确指定本次任务的语言，直接沿用；不得根据对话、浏览器、操作系统或当前模板推断语言。收到答复后，才能翻译、生成架构或部署。若调用本技能的上级技能已经取得答案，不再重复询问。
 
-Read the current templates and their `<html lang>` marker. For an existing page, retain its recorded language unless the user requests a change. Establish the target tools directory and authorized write scope before editing; reuse existing approval. Translate with the agent rather than requiring an external translation service or installing language packs.
+读取当前模板及其 `<html lang>` 语言标记。已有网页保留记录中的语言，除非用户要求更改。编辑前明确目标工具目录和已授权的写入范围，沿用已有批准。由 Agent 直接翻译，不要求外部翻译服务，也不安装语言包。
 
-## Translate the tools
+## 翻译工具文件
 
-Work from source files, then rebuild `index.html`; editing the bundled HTML alone loses translations on the next build.
+先修改源文件，再重新生成 `index.html`。如果只修改打包后的 HTML，下次构建会丢失翻译。
 
-| Translate into the selected language | Preserve exactly |
+| 翻译为所选语言的内容 | 必须原样保留的内容 |
 | --- | --- |
-| Visible HTML text, titles, tooltips, placeholders, accessible labels, buttons, dialogs and empty states | HTML hooks, IDs, classes, selectors, template slots and SVG data |
-| JavaScript-generated labels, confirmation messages, validation errors, save/import/sync status and server errors shown in the page | JavaScript identifiers, object keys, enum values, routing and comparisons that control behavior |
-| Default display names, purposes, parameter descriptions, method flows, event descriptions and test instructions in model defaults and data/template examples | Every `englishName` value, actual source symbols, programming-language names, data types, paths, URLs and version/evidence fields |
-| Human-readable tool instructions, template guidance and generated access instructions | Commands, code examples and data contracts; translate only explanatory prose within examples |
+| HTML 中可见的文字、标题、提示、占位文字、无障碍标签、按钮、弹窗和空内容提示 | HTML 程序绑定标记、ID、类名、选择器、模板插槽和 SVG 数据 |
+| JavaScript 生成的标签、确认信息、校验错误、保存与导入及同步状态，以及页面显示的服务端错误 | JavaScript 标识符、对象键、枚举值、路由和控制行为的比较条件 |
+| 模型默认值及数据、模板示例中的默认显示名称、用途、参数说明、方法流程、事件说明和测试步骤 | 所有 `englishName` 值、实际源码符号、编程语言名称、数据类型、路径、URL，以及版本和证据字段 |
+| 供人阅读的工具说明、模板指南和生成的访问说明 | 命令、代码示例和数据约定；示例中只翻译解释性文字 |
 
-Translation changes text only. Preserve CSS, fonts, spacing, positions, dimensions, colors, DOM order, alignment, layout and existing direction attributes. Do not add right-to-left mirroring or other styling changes for a language, including Arabic. Do not add direction overrides to headings, inputs or the canvas. A layout change requires a separate user request.
+翻译只改文字。保留 CSS、字体、间距、位置、尺寸、颜色、DOM 顺序、对齐方式、布局和已有方向属性。不得因为所选语言是阿拉伯文等语言，就增加从右向左的镜像布局或其他样式改动。不得给标题、输入框或画布增加方向覆盖规则。只有用户另外要求时，才能修改布局。
 
-Inspect `html/templates/`, `html/assets/`, `html/server.mjs`, `html/scripts/`, `archify.json` and the tools README as applicable. Keep guidance/skeleton pairs consistent. In JavaScript, distinguish displayed text from strings used as lookup keys or branch conditions. If the same word serves both purposes, translate at the display boundary and preserve its internal value. Do not use blind global replacement or alter business meaning. Preserve interpolation expressions, escaping, line breaks and placeholders in messages.
+按需要检查 `html/templates/`、`html/assets/`、`html/server.mjs`、`html/scripts/`、`archify.json` 和工具目录的 README。成对的指南与基础模板应保持一致。处理 JavaScript 时，区分显示文字和用作查找键或分支条件的字符串。同一个词同时用于显示和程序判断时，只在显示处翻译，保留内部值。不得盲目全局替换，也不得改变业务含义。保留消息中的插值表达式、转义、换行和占位符。
 
-Set the canvas skeleton and guide's `<html lang>` to the selected language tag as a language marker; retain the original `dir` attributes unchanged. The language marker must survive rebuilding and HTML export. A translated label on the English-name field is allowed; its value stays English.
+将画布基础模板和指南中的 `<html lang>` 设置为所选语言的标签，作为语言标记；原有 `dir` 属性保持不变。重新生成和导出 HTML 后，语言标记必须保留。英文名称字段的标签可以翻译，但字段值仍须保留英文。
 
-This task covers the bundled tools, not an existing project's business architecture. When handing off to architecture generation, pass the selected language so its new display names and descriptive content use that language while English names retain their role. Translate existing project data only when that change is requested.
+本技能处理内置工具文件，不直接处理已有项目的业务架构。交接给架构生成阶段时，传递所选语言，使新生成的显示名称和说明文字使用该语言，英文名称仍保持原有用途。只有用户要求时，才翻译已有项目数据。
 
-## Rebuild, verify and hand off
+## 重新生成、验证和交接
 
-Run from the selected tools directory:
+在选定的工具目录中运行：
 
 ```sh
 node html/scripts/build.mjs --runtime
@@ -42,6 +42,6 @@ node html/scripts/check.mjs archify.json
 node html/scripts/check.mjs index.html
 ```
 
-Check changed JavaScript with `node --check`, validate translated JSON, and compare protected identifiers and `englishName` values with their pre-edit values. Confirm CSS is unchanged and compare layout, DOM order and direction attributes with the original. Read the rebuilt HTML back and confirm its language marker. Do not claim completion from a marker alone: inspect visible controls, module editing, new-item defaults, validation/confirmation messages, save/refresh and English names through an actual deployed HTTP page. Use an isolated test project for edits and record which paths were checked; distinguish API checks from real browser checks.
+使用 `node --check` 检查改过的 JavaScript，校验翻译后的 JSON，并将受保护的标识符和 `englishName` 值与修改前逐项比较。确认 CSS 未变，并对照原文件检查布局、DOM 顺序和方向属性。回读重新生成的 HTML，确认语言标记。不能只看到标记就宣称完成：需要在实际部署的 HTTP 网页中检查可见控件、模块编辑、新增内容的默认文字、校验和确认消息、保存与刷新，以及英文名称。编辑验证使用隔离的测试项目，并记录检查了哪些操作路径；区分 API 检查和真实浏览器检查。
 
-If translation or verification is incomplete, report the affected files and do not deploy an untranslated fallback as completed work. Return the actual tools path, selected language/tag, changed files, rebuilt entry and check results to the calling skill. Do not start a server unless deployment was requested.
+翻译或验证未完成时，报告受影响的文件，不得将未翻译的备用页面部署后宣称完成。向调用本技能的上级技能交付实际工具路径、所选语言及标签、改动文件、重新生成的入口和检查结果。只有用户要求部署时，才启动服务。

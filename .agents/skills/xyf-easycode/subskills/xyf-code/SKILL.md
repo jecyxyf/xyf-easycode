@@ -1,74 +1,74 @@
 ---
 name: xyf-code
-description: Implement an agreed EasyCode architecture through dependency planning, module development, document checks, independent review, integration repairs, and delivery. Use xyf-archify for architecture design or editor deployment.
+description: 按已确认的 EasyCode 架构完成依赖规划、模块开发、文档核对、独立审查、集成修复和交付。架构设计或编辑器部署使用 xyf-archify。
 ---
 
-# XYF Code
+# XYF 编码
 
-The main agent plans, coordinates, personally verifies documents, personally reviews the complete final change, and delivers. Developers implement, test, and fix one module at a time; independent reviewers inspect module changes. Steps 2-4 may run in dependency batches. Do not mark a module complete before its checks pass.
+主 Agent 负责规划、协调、亲自核对文档、亲自审查最终完整改动，以及交付。开发者每次实现、测试和修复一个模块；独立审查者检查模块改动。步骤 2 至 4 可以按依赖关系分批执行。模块通过检查前，不得标记为完成。
 
-Follow the agreed architecture without silently deleting, replacing, simplifying, or changing it. Reuse valid confirmations. Keep single-stage and read-only requests within scope.
+遵守已确认的架构，不得擅自删除、替换、简化或修改。沿用仍有效的确认。单阶段任务和只读任务均应严格控制在用户要求的范围内。
 
-## 1. Inspect differences and plan
+## 1. 检查差异并制定计划
 
-Owner: main agent. Pass condition: evidenced differences/dependencies, assignable plan, required authorization.
+负责人：主 Agent。通过条件：差异和依赖有证据，计划可以分配执行，并已取得必要授权。
 
-- Read project rules, source, and build configuration. Use the confirmed actual architecture path: default `docs/archfiy/archify.json`, or existing `docs/archify/archify.json`. Resolve competing baselines; never use the tool's empty template as requirements. Report/confirm the absolute configuration path and all/selected module/member scope; reuse existing explicit confirmation.
-- Personally use [xyf-archifycheck](../xyf-archifycheck/SKILL.md) in the current agent to record conformance, differences, uncertainty, schema errors and relevant warnings, without default-filling or writeback. Record document hashes, initial source state including user uncommitted edits, and review baseline. Preserve user changes.
-- Pause affected work for empty architecture, conflicting requirements, invalid public names, unconfirmed input/output, or essential missing details. User confirmation may supply evidence without automatically authorizing documentation changes. Continue independent work; do not rewrite already conforming code just to create tasks.
-- Order modules by stable IDs, explicit `dependencies`, public interfaces, and actual calls; `relations` are canvas annotations. Resolve unclear/cyclic dependencies and interface conflicts before declaring tasks independent. New prerequisite modules must pass steps 3/4; existing prerequisites need current usability evidence before dependent work starts.
-- Present a table of module ID, difference/evidence, dependencies/order, task, owner, writable files, acceptance requirements, parallel groups, shared files and blockers. Obtain project-required batch-write authorization; delegation cannot bypass it.
+- 读取项目规则、源码和构建配置。使用已确认的实际架构路径：默认为 `docs/archfiy/archify.json`，已有项目也可使用 `docs/archify/archify.json`。若有多个基准，先解决冲突；不得用工具的空模板代替需求。报告或确认配置文件的绝对路径，以及处理全部还是指定的模块、成员；沿用已有的明确确认。
+- 在当前 Agent 中亲自使用 [xyf-archifycheck](../xyf-archifycheck/SKILL.md)，记录符合情况、差异、不确定事项、数据结构错误和相关警告，不补默认值、不写回文件。记录文档哈希值、包含用户未提交修改的初始源码状态，以及审查基准。保留用户修改。
+- 架构为空、需求冲突、对外名称无效、输入输出未确认或关键细节缺失时，暂停受影响的工作。用户确认可以补充证据，但不自动代表授权修改文档。继续能够独立推进的工作；不得只为凑出任务而重写已经符合约定的代码。
+- 根据稳定 ID、明确的 `dependencies`、对外接口和实际调用关系安排模块顺序；`relations` 只是画布标注。在宣布任务彼此独立前，先解决不清楚的依赖、循环依赖和接口冲突。新建的前置模块必须通过步骤 3、4；依赖既有模块的工作开始前，也需要这些模块当前可用的证据。
+- 用表格列出模块 ID、差异及证据、依赖及顺序、任务、负责人、可写文件、验收要求、并行分组、共享文件和阻碍。按项目要求取得批量写入授权，不能通过委派任务绕过授权。
 
-Interpret the [data guide](../../tools/html/templates/archifytemplate.template.jsonc): groups/group English names describe layer directories under the code root without forcing language namespaces. Repository/language/codeLocation locate actual code; missing paths do not authorize migration. Requirements/dependencies are explicit text, not guesses from arrows. Public members are parameters, structures, `interfaces` (methods), events, and tests. Missing/empty `defaultValue` means no documented default, not zero/false/empty string. Unconfirmed empty input/output lists do not establish absence. Resolve invalid/conflicting public names, layer/path requirements, and ambiguous contracts before implementation.
+按[数据指南](../../tools/html/templates/archifytemplate.template.jsonc)理解模型：分组及分组的英文名称描述代码根目录下的分层目录，不强制对应编程语言的命名空间。仓库信息、编程语言和 `codeLocation` 用于定位实际代码；路径缺失不代表获得了迁移代码的授权。需求和依赖应是明确文字，不能从箭头猜测。对外成员包括参数、结构、`interfaces` 中的方法、事件和测试。`defaultValue` 缺失或为空，表示文档没有规定默认值，不代表默认值是零、false 或空字符串。尚未确认的空输入输出列表，不能证明没有输入输出。实现前先解决无效或冲突的对外名称、分层和路径要求，以及含糊的约定。
 
-## 2. Develop modules in parallel
+## 2. 并行开发模块
 
-Owner: main agent coordinates; developers implement. Pass condition: implementation and required tests pass, then the writer stops for handoff.
+负责人：主 Agent 协调，开发者实现。通过条件：实现和必要测试通过，随后开发者停止写入，准备交接。
 
-- Give each developer actual project/configuration paths, one module ID, requirements/differences, dependency state, allowed files, absolute test root and writable subdirectory, acceptance checks, authorization, document version and review baseline. One developer handles one module at a time.
-- Architecture/key-dependency changes pause affected tasks immediately. Recheck evidence, revise plans, hand off context and invalidate affected prior passes. Do not continue against a stale design or guess historical changes.
-- Parallelize only independent tasks with satisfied prerequisites. One active writer per module and per file. Handle shared files centrally or serially. Confirm the previous writer stopped before transferring ownership or starting review. Never overwrite user/other-agent edits.
-- Match public names, types, documented defaults and behavior. Internal helpers may follow existing conventions. Implement each method/event flow step with a valid numbered code comment before the step. Without documented flow, choose a sequence and still add numbered comments. Reuse libraries; do not invent an event service, empty implementation, fixed fake result, or simulated completion.
-- **All test entries, cases, fixtures, temporary data, caches, logs, coverage and reports must be written/run under `<project>/docs/archify/test/` and its subdirectories.** The test working directory, tool temporary directories, and test-related build/type-check outputs must also stay there. Create authorized module subdirectories for isolation. Referenced business source and reused tools may live outside. Do not migrate/delete existing tests or use them to bypass this run's directory requirement. Adapt tools within scope or report a blocker.
-- Verify actual behavior against architecture tests, or confirmed requirements when tests are absent; run needed builds/type checks under the same directory rules. Report actual working directory, commands, results and gaps. Existing test files or historical passes are not current execution evidence.
-- Report module ID, changed files, review scope, tests and blockers, then stop writing. Do not assume automatic hooks or self-approve acceptance. If multi-agent development/review is unavailable or prohibited, disclose the unavailable stage and obtain agreement on changed delivery requirements; never pretend delegation or independent review ran.
+- 向每位开发者提供实际项目和配置路径、一个模块 ID、需求和差异、依赖状态、允许修改的文件、测试根目录绝对路径及可写子目录、验收检查、授权、文档版本和审查基准。每位开发者同一时间只处理一个模块。
+- 架构或关键依赖发生变化时，立即暂停受影响的任务。重新核对证据、调整计划、交接上下文，并将受影响的既有通过结果作废。不得继续按旧设计开发，也不得猜测历史变更。
+- 只有前提条件已满足、彼此独立的任务才能并行。每个模块、每个文件同一时间只能有一位写入者。共享文件由主 Agent 集中处理或串行修改。转交负责人或开始审查前，先确认前一位写入者已经停止。不得覆盖用户或其他 Agent 的修改。
+- 对外名称、类型、文档规定的默认值和行为必须与约定一致。内部辅助方法可以沿用现有规范。实现方法或事件的流程时，每一步之前都要添加有效的编号代码注释。文档没有规定流程时，自行选择执行顺序，也要添加编号注释。复用现有库，不得凭空增加事件服务、提交空实现、返回固定的虚假结果，或模拟完成。
+- **所有测试入口、用例、测试数据、临时数据、缓存、日志、覆盖率数据和报告，都必须在 `<project>/docs/archify/test/` 及其子目录中写入和运行。** 测试工作目录、工具临时目录，以及与测试有关的构建、类型检查输出也必须位于其中。可以在授权范围内创建模块子目录进行隔离。被引用的业务源码和复用工具可以位于外部。不得迁移或删除已有测试，也不得借用已有测试绕过本次运行的目录要求。在范围内适配工具，无法适配时报告阻碍。
+- 按架构中的测试要求验证实际行为；未规定测试时，按已确认需求验证。必要的构建和类型检查也遵守相同目录规则。报告实际工作目录、命令、结果和缺口。已有测试文件或历史通过记录不代表本次实际执行过。
+- 报告模块 ID、改动文件、审查范围、测试和阻碍，随后停止写入。不得假设自动钩子已执行，也不得自行宣布验收通过。如果多 Agent 开发或审查不可用、被禁止，应说明无法执行的阶段，并就调整后的交付要求取得一致；不得假称已委派任务或已完成独立审查。
 
-## 3. Main-agent document verification
+## 3. 主 Agent 核对文档
 
-Owner: main agent personally. Pass condition: complete scoped conformance without unresolved uncertainty.
+负责人：主 Agent 亲自执行。通过条件：范围内的全部约定均已核对符合，没有尚未解决的不确定事项。
 
-Use [xyf-archifycheck](../xyf-archifycheck/SKILL.md) and personally trace requirements, dependencies, public members, inputs/outputs, flow, errors and test obligations. Matching names, passing tests or developer self-review cannot replace this check.
+使用 [xyf-archifycheck](../xyf-archifycheck/SKILL.md)，亲自追踪需求、依赖、对外成员、输入输出、流程、错误处理和测试要求。名称一致、测试通过或开发者自查，都不能代替本步骤。
 
-Remain read-only during comparison. Record module ID, document/source content versions, coverage, conclusions and file/line evidence. Checked files and relevant dependencies must not change concurrently. Return specific differences for step-2 fixes/tests and repeat affected checks. Resolve uncertainty before marking conforming. Static agreement does not replace runtime testing. Register passes in task records without writing architecture status. Only then proceed to step 4.
+核对期间保持只读。记录模块 ID、文档和源码内容版本、覆盖范围、结论及文件和行号证据。核对中的文件及其相关依赖不得同时被修改。将具体差异退回步骤 2 修复、测试，再重复受影响的检查。判定符合前，先解决不确定事项。静态一致不能代替运行测试。将通过结果记入任务记录，不写入架构状态。完成后才能进入步骤 4。
 
-## 4. Independent module review
+## 4. 模块独立审查
 
-Owner: independent reviewer, coordinated by main agent. Pass condition: review completed and defects fixed/rechecked.
+负责人：独立审查者，由主 Agent 协调。通过条件：审查完成，发现的缺陷已修复并复查。
 
-Give a separate reviewer [review-agent](../review-agent/SKILL.md), project rules, module scope, baseline, and relevant uncommitted changes. The module's current developer/fixer cannot review their own work. Review actual final code.
+向独立的审查者提供 [review-agent](../review-agent/SKILL.md)、项目规则、模块范围、基准和相关未提交改动。模块当前的开发者或修复者不能审查自己的工作。审查对象必须是实际的最终代码。
 
-Reviewers are read-only: no files, commits, pushes or further delegation. Read the whole scoped diff, surrounding execution paths, callers and tests. Report only evidenced new defects with P0-P3 severity and precise locations, not speculative/style changes.
+审查者保持只读：不得写文件、提交、推送或继续委派。阅读范围内的完整差异、周边执行路径、调用方和测试。只报告有证据的新缺陷，标明 P0 至 P3 严重程度及准确位置，不报告猜测性问题或样式调整建议。
 
-Send defects back for step-2 repair/testing, repeat affected step-3 checks, then obtain independent re-review. Every finding needs a disposition and evidence, not merely a reply. Record content version, coverage, conclusion and gaps. No findings is not a test pass. Complete a module only after tests and steps 3/4 pass; recheck changed dependencies/callers.
+将缺陷退回步骤 2 修复和测试，再重复受影响的步骤 3 检查，随后由独立审查者复查。每条发现都要有处理结论和证据，不能仅回复一句话。记录内容版本、覆盖范围、结论和缺口。没有发现问题不代表测试通过。只有测试和步骤 3、4 全部通过，模块才算完成；依赖或调用方有变化时，需要重新检查。
 
-## 5. Main-agent overall review and coordinated repairs
+## 5. 主 Agent 整体审查并协调修复
 
-Owner: main agent personally reviews; developers repair. Pass condition: integration verified and review defects resolved/rechecked.
+负责人：主 Agent 亲自审查，开发者修复。通过条件：集成已验证，审查发现的缺陷已处理并复查。
 
-Confirm all planned modules passed tests and steps 3/4, and all writers stopped. Personally use [review-agent](../review-agent/SKILL.md) against the agreed original baseline, covering every final change and related call path. Do not merely summarize module reviews or inspect only the last fix. Focus on cross-module interfaces, actual dependencies, data transfer, error propagation and compatibility.
+确认所有计划中的模块均通过测试和步骤 3、4，所有写入者均已停止。亲自使用 [review-agent](../review-agent/SKILL.md)，对照已确认的原始基准检查最终的每一处改动及相关调用路径。不得只汇总模块审查，也不得只检查最后一次修复。重点检查跨模块接口、实际依赖、数据传递、错误传播和兼容性。
 
-Run required integration/regression tests, builds and type checks under `<project>/docs/archify/test/`, following step 2's execution/output rules. Report real commands, working directories, results and environmental blockers. Separate module passes do not prove integration.
+在 `<project>/docs/archify/test/` 下执行必要的集成和回归测试、构建及类型检查，遵守步骤 2 的执行与输出目录规则。报告实际命令、工作目录、结果和环境阻碍。各模块单独通过不能证明集成通过。
 
-List repair evidence, severity, modules, tasks, owners, files, dependencies and recheck requirements. Parallelize independent repairs; serialize shared/dependent files. Confirm scope expansions first. After tests, repeat affected steps 3/4 and personally recheck findings/cross-module behavior while retaining complete original review coverage. Stop repeated unproductive retries and report blockers rather than skipping defects.
+列出修复证据、严重程度、模块、任务、负责人、文件、依赖和复查要求。独立修复可以并行；涉及共享或相互依赖文件的修复串行处理。扩大范围前先取得确认。测试后，重复受影响的步骤 3、4，并亲自复查发现的问题和跨模块行为，同时保留对原始审查范围的完整覆盖。反复尝试仍无进展时，应停止重试并报告阻碍，不得跳过缺陷。
 
-## 6. Final acceptance and delivery
+## 6. 最终验收与交付
 
-Owner: main agent. Pass condition: all scoped implementation, tests, document checks and defect handling complete.
+负责人：主 Agent。通过条件：范围内的实现、测试、文档核对和缺陷处理全部完成。
 
-Confirm no writers remain. Verify final document/source content including uncommitted edits, coverage and baseline; reuse results only when these still match. Final checks cover all selected modules and affected relationships, not a sample. Final/supplementary tests follow the same `docs/archify/test/` rules. Verify actual working directories/logs/reports and give evidence paths.
+确认没有写入者继续工作。核对最终文档和源码内容，包括未提交改动、覆盖范围和基准；只有这些仍然一致时，才能复用既有结果。最终检查应覆盖全部选定模块和受影响关系，不能抽样。最终测试和补充测试同样遵守 `docs/archify/test/` 目录规则。核实实际工作目录、日志和报告，并提供证据路径。
 
-Do not claim complete acceptance with unrun required tests, failures, uncertain document conformance, unperformed required independent review, or unresolved defects. Static conformance, `No findings.`, and architecture `verified` are not runtime acceptance. Record explicit user scope reductions and their impact.
+存在必要测试未运行、检查失败、文档符合情况不确定、必要独立审查未执行，或缺陷未解决时，不得声称已完整验收。静态符合、“未发现问题”（`No findings.`）或架构的 `verified` 状态，都不代表运行验收通过。记录用户明确缩小的范围及其影响。
 
-Do not write implementation-derived locations, sources, status or versions back into `archify.json` by default. If the agreed solution is infeasible, pause affected work and explain cause/impact/options. Only after explicit agreement on a revised design and write scope, route changes through [xyf-archify](../xyf-archify/SKILL.md), preserving IDs/other content; update plans and repeat affected checks. Never change documentation to conceal implementation deviations.
+默认不将实现中得出的位置、来源、状态或版本写回 `archify.json`。已确认方案无法实现时，暂停受影响的工作，说明原因、影响和可选方案。只有用户明确同意修改后的设计及写入范围后，才能通过 [xyf-archify](../xyf-archify/SKILL.md) 处理变更，并保留 ID 和其他内容；随后更新计划，重复受影响的检查。不得通过修改文档掩盖实现偏差。
 
-Deliver concise tables of modules, actual files, module/integration tests, document checks, reviews, gaps and limits. Write only in the authorized project, never installed skill tools or another project. Commit, push, merge or publish only on explicit request.
+用简短表格交付模块、实际文件、模块与集成测试、文档核对、审查、缺口和限制。只在已授权的项目内写入，不得写入已安装的技能工具目录或其他项目。只有用户明确要求时，才提交、推送、合并或发布。

@@ -1,40 +1,40 @@
 ---
 name: xyf-archifycheck
-description: Read-only verification of actual code against an EasyCode architecture or specified requirements/interfaces. Report differences and evidence; use xyf-code for authorized repairs.
+description: 只读核对实际代码是否符合 EasyCode 架构或指定的需求和接口，报告差异及证据；已获授权的修复使用 xyf-code。
 ---
 
-# XYF ArchifyCheck
+# XYF 架构核对
 
-Perform the comparison in the current agent. Do not modify code, architecture, or documents.
+在当前 Agent 中完成核对，不修改代码、架构或文档。
 
-## Establish scope
+## 明确范围
 
-Reuse specified project/document/module scope and authorization. Without a module limit, cover all documented modules. Default: `<project>/docs/archfiy/archify.json`, or existing `docs/archify/archify.json`; resolve competing baselines. Never use a tool template, example, or stale snapshot as project requirements.
+沿用已指定的项目、文档、模块范围和授权。未限制模块时，覆盖文档中的全部模块。默认路径为 `<project>/docs/archfiy/archify.json`，已有项目也可使用 `docs/archify/archify.json`；若有多个基准，先解决冲突。不得将工具模板、示例或旧快照作为项目需求。
 
-Read project rules. Verify source roots/entries rather than trusting `repository.path`, `codeLocation`, or `sources`. Locate owned source from build/startup configuration as needed. Exclude skills, third-party implementations, caches, and generated pages unless explicitly targeted. Record document hashes/version and actual source version/uncommitted differences. A commit alone does not establish current content. Recheck changed evidence.
+读取项目规则。核实源码根目录和入口，不能直接相信 `repository.path`、`codeLocation` 或 `sources`。必要时根据构建、启动配置定位项目自有源码。除非明确指定为检查对象，否则排除技能、第三方实现、缓存和生成网页。记录文档哈希值或版本，以及实际源码版本和未提交差异。仅凭提交记录不能确定当前内容。证据变化后需要重新检查。
 
-Parse JSON with [ProjectFile.parse](../../tools/html/assets/project-file.js) and check [Model.validate](../../tools/html/assets/model.js); see the [data guide](../../tools/html/templates/archifytemplate.template.jsonc). Do not fill defaults, change state, or write back. Other documents retain their actual sections/clauses/interfaces. Mark missing/empty/contradictory/ambiguous requirements `Cannot confirm`; continue unaffected checks and ask only essential questions.
+使用 [ProjectFile.parse](../../tools/html/assets/project-file.js) 解析 JSON，通过 [Model.validate](../../tools/html/assets/model.js) 检查；字段说明见[数据指南](../../tools/html/templates/archifytemplate.template.jsonc)。不得补默认值、改状态或写回文件。其他格式的文档按其实际章节、条款和接口核对。需求缺失、为空、矛盾或含糊时，标记为“无法确认”（`Cannot confirm`）；继续不受影响的检查，只询问关键问题。
 
-## Verify every item
+## 逐项核对
 
-List scoped modules, members, and requirements. Trace entry/registration/calls to actual execution, reads/writes, and returns. Matching names/comments or a visible button do not prove conformance. Batch large work without claiming sampled coverage is complete.
+列出范围内的模块、成员和需求。从入口、注册和调用关系追踪到实际执行、读写和返回。名称或注释相同、页面存在按钮，都不能证明实现符合约定。工作量大时可以分批处理，但不得将抽样检查说成完整覆盖。
 
-| Contract | Check |
+| 约定 | 核对内容 |
 | --- | --- |
-| Function/requirements | Normal paths, important conditions, results and side effects; no empty/fake implementation |
-| Layer/language/location | Explicit contracts, without imposing absent conventions |
-| Dependencies | Explicit requirements backed by imports/calls/registration/runtime prerequisites |
-| Parameters/structures/input/output | Public names, fields, types, required flags, documented defaults and returns |
-| Method flow/errors | Real steps/order/branches/error handling, not comments alone |
-| Events | Direction, name, payload, flow and wiring |
-| Tests | Required steps/outcomes covered; distinguish static reading, actual runs and gaps |
+| 功能与需求 | 正常路径、重要条件、结果和副作用；不得存在空实现或伪造实现 |
+| 分层、编程语言与位置 | 核对明确约定，不强加文档未规定的规范 |
+| 依赖 | 明确需求是否有导入、调用、注册关系或运行前提作为依据 |
+| 参数、结构、输入与输出 | 对外名称、字段、类型、必填标记、文档中的默认值和返回值 |
+| 方法流程与错误处理 | 实际步骤、顺序、分支和错误处理，不能只看注释 |
+| 事件 | 方向、名称、传递数据、流程和连接关系 |
+| 测试 | 是否覆盖规定的步骤和结果；区分静态阅读、实际运行与未覆盖部分 |
 
-Methods remain in `interfaces`. False input/output confirmation flags do not mean empty contracts are confirmed. Missing/empty `defaultValue` means no documented default, not zero/false/empty string. `verified` is not a business test pass. `relations` annotate the canvas; dependencies come from explicit requirements and actual source. Unconstrained internal helpers/behavior are not automatically violations. Before alleging missing implementation, inspect registration, callers and alternate execution paths. Distinguish insufficient evidence from defects.
+方法仍存放在 `interfaces` 中。输入、输出确认标记为 false，不代表已确认这些约定可以为空。`defaultValue` 缺失或为空，表示文档没有规定默认值，不代表默认值是零、false 或空字符串。`verified` 状态不代表业务测试通过。`relations` 用于画布标注，依赖关系应以明确需求和实际源码为依据。未受约束的内部辅助方法或行为不自动构成违规。在断定缺少实现前，先检查注册关系、调用方和其他执行路径。区分证据不足与真实缺陷。
 
-## Boundary and report
+## 工作边界与报告
 
-Default to static read-only work: no installs, builds, tests, server startup or report-file writes. Existing task authorization for runtime checks remains valid; use project tools/rules and record actual commands/results/coverage. Do not count historical, simulated, or unrun checks as current passes.
+默认只做静态、只读检查：不安装工具、不构建、不运行测试、不启动服务，也不写报告文件。任务中已有的运行检查授权仍然有效；按项目工具和规则执行，并记录实际命令、结果和覆盖范围。不得将历史检查、模拟检查或未运行的检查算作本次通过。
 
-Do not erase differences by changing code/documents. Requested repairs route to [xyf-code](../xyf-code/SKILL.md); confirmed architecture changes to [xyf-archify](../xyf-archify/SKILL.md).
+不得通过修改代码或文档消除差异。用户要求的修复交给 [xyf-code](../xyf-code/SKILL.md)；已确认的架构变更交给 [xyf-archify](../xyf-archify/SKILL.md)。
 
-Report scope/key findings, then a table of requirement, document location, source evidence, result, and difference/action. Results: `Conforms`, `Does not conform`, `Cannot confirm`, with file paths/lines and stable IDs. State static/runtime evidence. Any demonstrated mismatch means overall `Does not conform`; otherwise missing evidence/coverage means `Cannot confirm`. Only complete supported coverage permits `Conforms`. List unexamined modules, unrun tests, and blockers separately. Static conformance is not runtime acceptance.
+先报告范围和主要发现，再用表格列出需求、文档位置、源码证据、结果，以及差异或处理建议。结果分为“符合”（`Conforms`）、“不符合”（`Does not conform`）和“无法确认”（`Cannot confirm`），并附文件路径、行号和稳定 ID。说明哪些是静态证据，哪些来自实际运行。只要已证实存在不一致，整体结果就是“不符合”；若没有已证实的不一致，但证据或覆盖不足，则为“无法确认”。只有完整覆盖且证据充分时，才能判定“符合”。单独列出未检查的模块、未运行的测试和阻碍。静态符合不代表运行验收通过。

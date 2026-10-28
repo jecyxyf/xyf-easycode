@@ -1,105 +1,105 @@
 ---
 name: xyf-archify
-description: Generate or maintain EasyCode architecture from agreed requirements or actual source and deploy its editable local webpage. Use for architecture work; application implementation and tests belong to xyf-code.
+description: 根据已确认的需求或实际源码生成、维护 EasyCode 架构，并部署可编辑的本地网页。用于架构设计和维护；业务代码实现与测试使用 xyf-code。
 ---
 
-# XYF Archify
+# XYF 架构
 
-Understand -> execute -> check: establish evidence/scope, verify content, lay out from top to bottom, validate data, and deploy the editor. Complete architecture work in the current agent without extra agents. Do not write, change or test application code here; use [xyf-code](../xyf-code/SKILL.md).
+理解 → 执行 → 检查：明确证据和范围，核对内容，按从上到下的顺序布局，校验数据，再部署编辑器。架构工作由当前 Agent 完成，不增加其他 Agent。本技能不编写、修改或测试业务代码；业务代码工作使用 [xyf-code](../xyf-code/SKILL.md)。
 
-## Establish the evidence
+## 明确证据
 
-For a new architecture webpage that will be deployed, the first user question must be **"Which language should the architecture webpage use?"**, asked in the conversation language before other requirements/scope questions. Accept any natural language and wait for the answer. Reuse an explicit answer passed by the entry skill or already supplied for this task; do not ask twice or infer a language from the current templates. Carry the answer into new architecture display names and descriptive content, and invoke [xyf-web-language](../xyf-web-language/SKILL.md) before deployment. Data-only work does not require a webpage-language question. Existing-page maintenance follows the page's recorded language unless the user requests a change.
+准备部署新架构网页时，第一个向用户提出的问题必须是：**“架构网页使用什么语言？”** 用当前对话的语言提问，先于其他需求和范围问题。接受任意自然语言，并等待答案。入口技能已传入明确答案，或用户已为本次任务指定语言时，直接沿用；不得重复提问，也不得根据当前模板推断语言。新架构的显示名称和说明文字使用所选语言，部署前调用 [xyf-web-language](../xyf-web-language/SKILL.md)。只处理数据时，不需要询问网页语言。维护已有网页时沿用页面记录的语言，除非用户要求更改。
 
-Identify the actual project, requested scope, current configuration and authorization; read project rules and reuse valid session decisions. Preserve stable IDs, user changes, layout and out-of-scope content. Resolve known unsaved webpage edits before replacing data. Do not overwrite current data with a stale snapshot or tool template, or treat an empty file in a new directory as the existing baseline.
+明确实际项目、用户要求的范围、当前配置和授权；读取项目规则，沿用会话中仍有效的决定。保留稳定 ID、用户修改、布局和范围外内容。替换数据前，先处理已知的网页未保存修改。不得用旧快照或工具模板覆盖当前数据，也不得将新目录中的空文件当作已有项目的基准。
 
-| Project | Required evidence |
+| 项目情况 | 必要依据 |
 | --- | --- |
-| No implementation | Use bundled [brainstorming](../brainstorming/SKILL.md) to confirm goals, functions, layers, modules and interfaces, then write the agreed configuration |
-| Existing code | Trace actual entries, registration, calls, data flow, reads/writes, conditions and outputs before choosing boundaries/layout |
+| 尚无实现 | 使用内置 [brainstorming](../brainstorming/SKILL.md) 确认目标、功能、分层、模块和接口，再写入已确认的配置 |
+| 已有代码 | 先追踪实际入口、注册关系、调用、数据流、读写、条件和输出，再确定边界与布局 |
 
-Architecture-only discussion does not require separate specification/plan files, application code, business tests or automatic Git commits. Reuse already confirmed design. Source-derived architecture records facts, not proposals, names guessed from filenames, or ideal behavior. Distinguish callers, actual executors, data recipients/storage, optional capabilities and normal paths.
+仅讨论架构时，不要求另建规格或计划文件、不编写业务代码、不运行业务测试，也不自动提交 Git。沿用已经确认的设计。根据源码提取的架构应记录事实，不能写成建议方案、按文件名猜出的名称或理想行为。区分调用方、实际执行者、数据接收方与存储方、可选能力和正常路径。
 
-### Limit analysis before searching
+### 搜索前限定分析范围
 
-Prefer the user-specified business-source path. Otherwise inspect top-level build/startup/project references to locate owned source. Verify `repository.path`; do not default to the whole repository, current directory, or skill installation.
+优先使用用户指定的业务源码路径。没有指定时，检查顶层构建、启动和项目引用，定位项目自有源码。核实 `repository.path`，不得默认分析整个仓库、当前目录或技能安装目录。
 
-Before deep reads, give a short table of included business source, relevant owned tests/configuration, and exclusions. Apply boundaries before file enumeration/search, not after a whole-repository scan. Exclude agent/skill configuration (`.agents/`, `.codex/`, `.claude/`, skill packages), auxiliary tools/scripts/templates, third-party code (`node_modules/`, `vendor/`, `third_party/`, `.venv/`), Git data, generated build files, caches/logs, and generated architecture webpages. Existing architecture may be read as a maintenance baseline.
+深入阅读前，用简短表格列出纳入的业务源码、相关自有测试和配置，以及排除内容。列举文件或搜索前就应应用边界，不得先扫描整个仓库再排除。排除 Agent 和技能配置（`.agents/`、`.codex/`、`.claude/`、技能包）、辅助工具与脚本及模板、第三方代码（`node_modules/`、`vendor/`、`third_party/`、`.venv/`）、Git 数据、生成的构建文件、缓存与日志，以及生成的架构网页。已有架构可以作为维护基准读取。
 
-Read only necessary execution rules, model and template guidance as tools, not business implementation. Analyze a tool/skill/dependency itself only when explicitly requested as the target. Do not bypass exclusions through hidden-file scans, symlinks or call tracing. Follow external dependencies to owned call sites only; record visible names/arguments/handling without inventing internals or library modules. Owned multipackage business source remains eligible. If source cannot be identified, ask for the missing path; do not use tooling to fill the architecture.
+只将必要的执行规则、模型和模板指南作为工具阅读，不把它们当成业务实现。只有用户明确将工具、技能或依赖本身指定为目标时，才分析其内部。不得通过扫描隐藏文件、符号链接或追踪调用绕过排除范围。追踪外部依赖时，只追到项目自有的调用位置；记录可见的名称、参数和处理方式，不编造其内部实现或库模块。项目自有的多包业务源码仍可纳入。无法确定源码位置时，询问缺失的路径，不得用工具自身的内容填充业务架构。
 
-## Paths and model
+## 路径与模型
 
-The installed skill root is two levels above this file's directory. Shared `tools/` is under that root. Run the following `tools/` commands from the installed root with actual project/configuration paths.
+本文件所在目录的上两级是技能安装根目录，共享的 `tools/` 位于该根目录下。以下以 `tools/` 开头的命令从技能安装根目录运行，参数使用实际项目和配置路径。
 
-| Location | Role |
+| 位置 | 用途 |
 | --- | --- |
-| `<project>/docs/archfiy/archify.json` | Current project architecture |
-| `<project>/docs/archfiy/index.html` | Generated editor |
-| `<project>/docs/archfiy/html/` | Server and maintenance tools |
-| `<project>/docs/archfiy/ReadMe.md` | Live URL, port and restart command |
-| [tools README](../../tools/README.md) | Deployment/use |
-| [model.js](../../tools/html/assets/model.js) | Authoritative fields and create/update/validate functions, formatVersion 1 |
-| [data guide](../../tools/html/templates/archifytemplate.template.jsonc) | Complete persistent-field explanation |
+| `<project>/docs/archfiy/archify.json` | 当前项目架构 |
+| `<project>/docs/archfiy/index.html` | 生成的编辑器 |
+| `<project>/docs/archfiy/html/` | 服务与维护工具 |
+| `<project>/docs/archfiy/ReadMe.md` | 实际访问地址、端口和重启命令 |
+| [工具说明](../../tools/README.md) | 部署和使用方法 |
+| [model.js](../../tools/html/assets/model.js) | 字段及创建、更新、校验函数的权威定义，formatVersion 为 1 |
+| [数据指南](../../tools/html/templates/archifytemplate.template.jsonc) | 持久化字段的完整说明 |
 
-Keep the intentional `docs/archfiy/` spelling and `archify.json` filename. User paths and existing `docs/archify/` deployments take precedence. Resolve conflicting real configurations before writing. Empty templates and example data are not requirements.
+保留有意沿用的 `docs/archfiy/` 拼写和 `archify.json` 文件名。优先使用用户指定的路径或已有的 `docs/archify/` 部署。实际配置存在冲突时，先解决再写入。空模板和示例数据不是项目需求。
 
-Template pairs: [canvas guide](../../tools/html/templates/canvas.template.html) / [skeleton](../../tools/html/templates/canvas.html), [module guide](../../tools/html/templates/module-node.template.html) / [skeleton](../../tools/html/templates/module-node.html), [group guide](../../tools/html/templates/group-layer.template.html) / [skeleton](../../tools/html/templates/group-layer.html), [data skeleton](../../tools/html/templates/archifytemplate.json).
+成对模板：[画布指南](../../tools/html/templates/canvas.template.html) / [基础模板](../../tools/html/templates/canvas.html)、[模块指南](../../tools/html/templates/module-node.template.html) / [基础模板](../../tools/html/templates/module-node.html)、[分层指南](../../tools/html/templates/group-layer.template.html) / [基础模板](../../tools/html/templates/group-layer.html)，以及[数据基础模板](../../tools/html/templates/archifytemplate.json)。
 
-## Build or maintain content
+## 生成或维护内容
 
-Every formal item must match confirmed design or actual source. Resolve doubts before generating/replacing formal data or deploying; do not omit doubtful content and claim completeness. Only use empty arrays/strings/omitted optional fields after confirming absence or non-applicability. Keep `unknowns: []` only after its questions are resolved.
+每一条正式内容都必须符合已确认设计或实际源码。在生成、替换正式数据或部署前，先解决疑问；不得略去有疑问的内容后宣称已完整完成。只有确认不存在或不适用后，才使用空数组、空字符串或省略可选字段。只有相关问题均已解决后，才能保留 `unknowns: []`。
 
-- `planned`: confirmed design awaiting implementation, not a guess.
-- `verified`: matches actual source with evidence, not a business-test pass.
-- `modified`: verified content changed semantically; reverify for delivery or confirm it as planned design. A status edit cannot replace verification.
-- All formal methods require complete checked inputs/outputs and both confirmation flags true. Empty arrays mean confirmed absence only.
+- `planned`：已确认、等待实现的设计，不是猜测。
+- `verified`：有证据证明与实际源码一致，不代表业务测试通过。
+- `modified`：原本已验证的内容发生了语义变化；交付前需要重新核验，或确认它是计划中的设计。修改状态不能代替验证。
+- 所有正式方法都要完整核对输入输出，且两个确认标记都为 true。空数组只能表示已经确认不存在对应内容。
 
-Understand responsibilities and real relationships first, then choose modules/layers, then layout. Do not map one file/function mechanically to one module or preselect fixed counts. Preserve actual code identifiers in source mode. Use the selected webpage language for new display names and descriptive content; keep English names in English. The editor's visible controls and default content must use the same language after xyf-web-language completes.
+先理解职责和实际关系，再划分模块、分层，最后安排布局。不得机械地把一个文件或函数映射为一个模块，也不得预先限定模块数量。根据源码提取架构时，保留实际代码标识符。新显示名称和说明文字使用所选网页语言，英文名称保留英文。xyf-web-language 完成后，编辑器可见控件和默认内容也必须使用同一语言。
 
-For every scoped module cover all names/purpose/language/code locations/group; requirements and important conditions; explicit `dependencies` string array (one confirmed requirement per entry, [] only for confirmed absence); public parameters including types/defaults/required flags; structures and every field; every `interfaces` method including purpose, all inputs/outputs, multiline flow/errors; events including direction/payload/flow; test steps/outcomes; actual sources and status. Do not sample a few representative methods. Source mode records existing test meanings, design mode confirmed acceptance tests. Do not create/run business tests.
+范围内每个模块都要完整记录：全部名称、用途、编程语言、代码位置和所属分层；需求与重要条件；明确的 `dependencies` 字符串数组，每项对应一条已确认要求，只有确认没有依赖时才使用 []；对外参数的类型、默认值和必填标记；结构及其每个字段；`interfaces` 中的每个方法，包括用途、全部输入输出、多行流程和错误处理；事件的方向、传递数据和流程；测试步骤与结果；实际来源和状态。不得只抽取几个代表性方法。源码提取模式记录已有测试的含义，设计模式记录已确认的验收测试。本技能不创建或运行业务测试。
 
-Sources must be actually read repository-relative files, 1-based `line`, optional `endLine` and `symbol`. `codeLocation` separately stores code-root-relative locations, newline-separated when multiple. Record actual Git revision and whole-repository dirty state. Modified/untracked/ignored sources need difference evidence or hashes; commit alone is insufficient. Do not invent revision data for non-Git projects.
+来源必须是实际读取过、相对于仓库的文件路径，`line` 从 1 开始，`endLine` 和 `symbol` 可选。`codeLocation` 单独保存相对于代码根目录的位置，多项之间用换行分隔。记录实际 Git 版本，以及整个仓库是否存在未提交修改。已修改、未跟踪或被忽略的源码需要提供差异证据或哈希值，仅有提交记录不够。非 Git 项目不得编造版本数据。
 
-Create directed `relations` from confirmed relationships; source-mode arrows need actual calls/imports/event wiring/read-write evidence. Never depict indirect calls as direct writes. Canvas annotations do not replace explicit dependencies. Lay layers out top to bottom; place close collaborators nearby, estimate node height from content, and allow room for readable arrows/labels. Preserve reverse calls/callbacks and out-of-scope layout. Group bounds are calculated; do not add unsupported size/routing fields. Rearrange the whole existing canvas only when requested.
+根据已确认的关系建立有向 `relations`。根据源码生成的箭头，需要有实际调用、导入、事件连接或读写证据。不得将间接调用画成直接写入。画布标注不能代替明确依赖。分层从上到下排列，将协作紧密的模块放近一些，按内容估计节点高度，并为可读的箭头和文字预留空间。保留反向调用、回调，以及范围外的布局。分组边界由程序计算，不添加不支持的尺寸或连线路径字段。只有用户要求时，才重新排列整个已有画布。
 
-## Validate and save
+## 校验与保存
 
-Use `globalThis.EasyCode.Model`. New objects use createProject/createModule/createInterface and corresponding parameter/structure/field/event/test constructors, then replace default example content with facts. Use updateModule/updateInterface/updateMember/updateRelation for semantic edits. IDs are globally unique and survive renames; remove invalid references on deletion. Flow/errors are strings; defaultValue is a string.
+使用 `globalThis.EasyCode.Model`。新对象通过 createProject/createModule/createInterface，以及对应的参数、结构、字段、事件和测试构造函数创建，再将默认示例内容替换为真实内容。语义修改使用 updateModule/updateInterface/updateMember/updateRelation。ID 全局唯一，改名后保持不变；删除对象时清理无效引用。flow/errors 的值为字符串，defaultValue 也为字符串。
 
-Check source -> architecture omissions and architecture -> evidence for every item. Validate completeness, actual conditions, boundaries, no unknown placeholders, retained IDs/user content, and no Model.validate errors. Handle each warning without fabricating data.
+逐项检查“源码 → 架构”是否遗漏，以及“架构 → 证据”是否有依据。核对完整性、实际条件和边界，确认没有未解决的占位内容、保留了 ID 和用户内容，并且没有 Model.validate 错误。逐条处理警告，不得编造数据。
 
-[ProjectFile.parse/stringify](../../tools/html/assets/project-file.js) parses/generates data without execution. Formal configuration is strict JSON, two-space indentation and final newline, no assignments/comments/functions/`__proto__`. Record original contents/hash, check again before writing, resolve conflicts, then parse, validate and deeply compare saved data. [files.mjs](../../tools/html/scripts/files.mjs) exposes readProjectFile/writeProjectFile and expectedVersion.
+[ProjectFile.parse/stringify](../../tools/html/assets/project-file.js) 在不执行代码的情况下解析和生成数据。正式配置必须是严格 JSON，使用两个空格缩进，文件末尾保留换行，不包含赋值、注释、函数或 `__proto__`。记录原内容或哈希值，写入前再次检查并解决冲突；保存后重新解析、校验，并深度比较数据。[files.mjs](../../tools/html/scripts/files.mjs) 提供 readProjectFile/writeProjectFile 及 expectedVersion。
 
-## Deploy the editor
+## 部署编辑器
 
-After complete configuration validation, deploy unless the user requested data only. Configuration-only maintenance does not require redeploying programs or rebuilding the entry.
+完整校验配置后进行部署，除非用户只要求处理数据。仅维护配置时，不需要重新部署程序或重新生成入口。
 
-1. Inspect the actual deployment, preserving existing JSON and webpage customization.
-   For a new page, use the language obtained by the first question and complete [xyf-web-language](../xyf-web-language/SKILL.md) on the installed `tools/` before running the deployment command. Pass the selected language and actual tools path; wait for its rebuilt/verified result. Read an existing page's `<html lang>` marker before maintenance or regeneration and ensure the tools match that language. Do not overwrite an existing translated page with tools in another language.
-2. From the installed skill root:
+1. 检查实际部署，保留已有 JSON 和网页定制内容。
+   新网页使用第一个问题取得的语言，在运行部署命令前，先由 [xyf-web-language](../xyf-web-language/SKILL.md) 翻译已安装的 `tools/`。传入所选语言和实际工具路径，等待重新生成及验证完成。维护或重新生成已有网页前，先读取其 `<html lang>` 标记，确保工具使用相同语言。不得用其他语言的工具覆盖已经翻译的网页。
+2. 从技能安装根目录运行：
 
    ```sh
    node tools/html/scripts/deploy.mjs "<project-root>" --output-dir docs/archfiy --source-file "<verified-archify.json>"
    ```
 
-3. Node.js 22+ builds the entry, deploys html/, and starts local HTTP on an available random port 10000-65535. Keep the command alive through the agent's persistent terminal. Verify/reuse an existing same-directory service. If Node is missing/old, explain the requirement and ask before installing/upgrading it; continue only after explicit consent and a successful version check. Do not claim a file path is a live page.
-4. Successful startup updates ReadMe.md with actual URL/port/data and `node html/server.mjs` restart instructions from the deployment directory, preserving notes outside the generated section. Restart can change the port. Ctrl+C stops the server. Explicit --port must be five digits. --no-start means no running service. --mode local is for explicitly requested manual JSON loading only.
+3. Node.js 22 或更高版本会生成入口、部署 html/，并在 10000-65535 中随机选择一个可用端口启动本地 HTTP 服务。通过 Agent 的持久终端保持命令运行。核验并复用已有的同目录服务。如果未安装 Node 或版本过旧，说明要求，并在安装或升级前询问；只有得到明确同意且版本检查成功后，才能继续。不得将文件路径说成正在运行的网页。
+4. 启动成功后，ReadMe.md 会更新实际访问地址、端口、数据文件，以及从部署目录运行 `node html/server.mjs` 的重启说明，生成区块之外的笔记应保留。重启后端口可能变化。Ctrl+C 停止服务。显式指定的 --port 必须为五位数。--no-start 表示没有启动服务。只有用户明确要求手动加载 JSON 时，才使用 --mode local。
 
-The HTTP page loads the same archify.json automatically. Save/Ctrl+S checks version, writes and reads back. External changes are polled around every two seconds: clean pages reload; dirty edits/open dialogs are preserved with a notice. Refresh/reopen/restart still reads the same file. Save As downloads a copy without rebinding; imports reach disk only after Save; HTML snapshots do not prove a save. Failed operations retain current edits.
+HTTP 网页自动加载同一个 archify.json。点击保存或按 Ctrl+S 时，检查版本、写入文件并回读。页面约每两秒检查一次外部修改：没有未保存修改时自动重新加载；存在未保存修改或打开的弹窗时，保留内容并提示。刷新、重新打开或重启后仍读取同一个文件。“另存为”只下载副本，不更换当前绑定文件；导入内容只有在保存后才写入磁盘；HTML 快照不代表已经保存配置。操作失败时保留当前编辑内容。
 
-After editor-source/template changes, run `node tools/html/scripts/build.mjs --runtime`. Standalone snapshots use `build.mjs <JSON> <export.html>` and must not replace the editor entry.
+修改编辑器源码或模板后，运行 `node tools/html/scripts/build.mjs --runtime`。独立快照使用 `build.mjs <JSON> <export.html>` 生成，不得替换编辑器入口。
 
-For targeted edits, locate by stable ID, owner and kind, not repeated display names. Name translation changes only the specified englishName and applicable status. Retain actual source identifiers; confirmed requested code renames remain planned until implemented, without changing business code here. [translation.js](../../tools/html/assets/translation.js) formatName formats identifiers, not meaning.
+定点编辑时，按稳定 ID、所属对象和类别定位，不能只凭可能重名的显示名称。名称翻译只修改指定的 englishName 和相关状态。保留实际源码标识符；用户已确认的代码改名要求，在真正实现前仍属于计划内容，本技能不修改业务代码。[translation.js](../../tools/html/assets/translation.js) 的 formatName 只负责整理标识符格式，不负责语义翻译。
 
-Recover live data from the actual JSON. Explicit HTML snapshots may be parsed with [Serialization.readProject](../../tools/html/assets/serialization.js) without script execution. Verify completeness/evidence and destination version before saving, preserving IDs/fields; do not overwrite current design from old snapshots.
+从实际 JSON 恢复当前数据。明确指定的 HTML 快照可使用 [Serialization.readProject](../../tools/html/assets/serialization.js) 解析，无需执行脚本。保存前核对完整性、证据和目标版本，保留 ID 和字段；不得用旧快照覆盖当前设计。
 
-## Check and deliver
+## 检查与交付
 
-Check data, model, scoped differences and saved readback. Run `node tools/html/scripts/check.mjs "<deployment>/index.html"` and `node tools/html/scripts/check.mjs --url "<actual-url>"`; compare API, disk and ReadMe.
+检查数据、模型、范围内差异和保存后的回读结果。运行 `node tools/html/scripts/check.mjs "<deployment>/index.html"` 和 `node tools/html/scripts/check.mjs --url "<actual-url>"`，对照 API、磁盘文件和 ReadMe。
 
-Open the actual HTTP page. Verify automatic loading, complete modules/layers/arrows, top-to-bottom layers, no overlaps, readable labels/directions, usable initial view. Actually edit/save/refresh or reopen to confirm the same JSON. API checks cannot replace browser checks; report missing browser verification honestly. Fix layout by positions/ports, not deleting necessary content.
+打开实际 HTTP 网页。检查自动加载，模块、分层和箭头是否完整，分层是否从上到下排列，是否没有重叠，文字和箭头方向是否清晰，初始视图是否可用。实际执行编辑、保存、刷新或重新打开，确认仍使用同一个 JSON。API 检查不能代替浏览器检查，未进行浏览器验证时应如实报告。通过调整位置和连接点修正布局，不得删除必要内容来解决布局问题。
 
-Use an isolated temporary project for saves, restart, external updates, dirty conflicts, imports and malformed JSON. Do not put test records into the formal architecture or test directories into the skill bundle. Verify five-digit ports and ReadMe after restart. Resolve failures without substituting stale outputs.
+使用隔离的临时项目验证保存、重启、外部更新、未保存修改冲突、导入，以及格式错误的 JSON。不得将测试记录写入正式架构，也不得将测试目录放进技能包。重启后核对五位数端口和 ReadMe。解决失败时，不得用旧产物冒充当前结果。
 
-Deliver a short table of absolute configuration/editor/ReadMe paths, actual URL/port, scope, source revision/workspace differences and checks actually run. Separate data, source, service and page results. If essential facts remain unresolved, preserve originals and report the specific blocker rather than delivering incomplete formal architecture.
+用简短表格交付配置、编辑器和 ReadMe 的绝对路径，实际访问地址和端口，处理范围，源码版本与工作区差异，以及实际执行的检查。分别报告数据、源码、服务和页面结果。关键事实仍未查清时，保留原文件并报告具体阻碍，不得交付不完整的正式架构。

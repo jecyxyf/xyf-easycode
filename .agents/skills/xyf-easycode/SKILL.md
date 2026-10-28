@@ -1,56 +1,56 @@
 ---
 name: xyf-easycode
-description: Guide EasyCode work from agreed requirements and visual architecture through implementation, document verification, and defect review. Use to start, continue, or check a project with EasyCode.
+description: 使用 EasyCode 启动、继续或检查项目，从需求确认和可视化架构推进到代码实现、文档核对与缺陷审查。
 metadata:
   version: "0.0.1"
 ---
 
-# XYF EasyCode
+# XYF EasyCode 主技能
 
-Improve VibeCoding interaction by making software architecture and interfaces visible, then keeping AI coding aligned with the user's agreed requirements. This entry point routes tasks and manages handoffs. Read only the subskill needed at the current stage.
+通过可查看的软件架构和接口改善 AI 编程交互，让代码实现始终符合用户已确认的需求。本入口负责选择任务流程、管理阶段交接。只读取当前阶段需要的子技能。
 
-## Bundled subskills
+## 内置子技能
 
-Paths are relative to this installed skill directory. Keep the entire bundle together. Read nested instructions directly if the agent does not register them as separate skills.
+以下路径均相对于本技能的安装目录。安装时应保留完整技能包。如果 Agent 没有将子技能单独注册为技能，直接读取对应的说明文件。
 
-| Subskill | Purpose | Instructions |
+| 子技能 | 用途 | 说明文件 |
 | --- | --- | --- |
-| brainstorming | Agree on requirements and design | [SKILL.md](subskills/brainstorming/SKILL.md) |
-| xyf-archify | Maintain architecture and deploy its editor | [SKILL.md](subskills/xyf-archify/SKILL.md) |
-| xyf-web-language | Translate webpage tools while preserving English names | [SKILL.md](subskills/xyf-web-language/SKILL.md) |
-| xyf-code | Implement, test, verify documents, review, and repair | [SKILL.md](subskills/xyf-code/SKILL.md) |
-| xyf-archifycheck | Read-only document/code comparison | [SKILL.md](subskills/xyf-archifycheck/SKILL.md) |
-| review-agent | Read-only review of new defects in a change | [SKILL.md](subskills/review-agent/SKILL.md) |
+| brainstorming | 确认需求和设计 | [SKILL.md](subskills/brainstorming/SKILL.md) |
+| xyf-archify | 维护架构并部署编辑器 | [SKILL.md](subskills/xyf-archify/SKILL.md) |
+| xyf-web-language | 翻译网页工具，保留英文名称 | [SKILL.md](subskills/xyf-web-language/SKILL.md) |
+| xyf-code | 实现、测试、核对文档、审查和修复 | [SKILL.md](subskills/xyf-code/SKILL.md) |
+| xyf-archifycheck | 只读核对文档与代码 | [SKILL.md](subskills/xyf-archifycheck/SKILL.md) |
+| review-agent | 只读审查改动引入的新缺陷 | [SKILL.md](subskills/review-agent/SKILL.md) |
 
-## Choose the route
+## 选择执行流程
 
-Establish the actual project, desired result, scope, artifacts, and existing authorization. Default to the current project; read its collaboration rules. Explain the start, finish, and reason in a short table. Ask only for missing essential information. Existing files alone do not prove prior stages are complete. Reuse valid confirmations; resolve missing prerequisites and obtain required write/scope authorization.
+明确实际项目、预期结果、处理范围、交付文件和已有授权。默认使用当前项目，并读取其协作规则。用简短表格说明从哪一步开始、在哪一步结束以及原因。只询问缺失的关键信息。不能仅凭已有文件就认定前面的阶段已经完成。沿用仍有效的确认，补齐前提条件，并取得必要的写入和范围授权。
 
-For a task that creates and deploys a new architecture webpage, ask **"Which language should the architecture webpage use?"** as the first user question, before requirements or scope questions. Ask in the conversation language, accept any natural language, and wait for the answer. Reuse a language explicitly supplied for this task; do not silently choose one. Pass it through brainstorming and architecture generation for display names and descriptive content. Before deployment, invoke [xyf-web-language](subskills/xyf-web-language/SKILL.md) to translate the installed `tools/` sources, preserve English names, rebuild and verify the editor. An explicit webpage-language change also routes there. Existing-page maintenance retains its recorded language unless a change is requested; unrelated coding/checking tasks do not need this question.
+创建并部署新架构网页时，第一个向用户提出的问题必须是：**“架构网页使用什么语言？”**，应先于需求和范围问题。用当前对话的语言提问，接受任意自然语言，并等待答复。若用户已经明确指定本次任务的语言，直接沿用，不得自行选择。将所选语言传递给 brainstorming 和架构生成阶段，用于显示名称与说明文字。部署前调用 [xyf-web-language](subskills/xyf-web-language/SKILL.md)，翻译已安装的 `tools/` 源文件，保留英文名称，重新生成并验证编辑器。用户明确要求切换网页语言时，也使用该子技能。维护已有网页时保留其记录的语言，除非用户要求更改；无关的编码或检查任务不需要询问网页语言。
 
-| Stage | Action and result |
+| 阶段 | 操作与结果 |
 | --- | --- |
-| 1 | brainstorming: agreed goals, constraints, design, and acceptance criteria |
-| 2 | xyf-archify: checked architecture, actual paths, and editor delivery |
-| 3 | xyf-code: six-step development, tests, main-agent document checks and personal overall review, with versions, coverage, baseline |
-| 4 | xyf-archifycheck: scoped comparison, differences, evidence, unresolved items |
-| 5 | review-agent: severity-ranked regressions and overall assessment |
+| 1 | brainstorming：确认目标、限制、设计和验收标准 |
+| 2 | xyf-archify：完成架构核对，提供实际路径并交付编辑器 |
+| 3 | xyf-code：按六步流程开发、测试，由主 Agent 亲自核对文档并整体审查，记录版本、覆盖范围和基准 |
+| 4 | xyf-archifycheck：按范围核对，记录差异、证据和未解决事项 |
+| 5 | review-agent：按严重程度列出新引入的缺陷，并给出整体评价 |
 
-New full development: 1 -> 2 -> 3 -> 4 -> 5. Confirmed requirements without usable architecture: 2 -> 3 -> 4 -> 5. Usable architecture: 3 -> 4 -> 5. Completed code needing checks: 4 -> 5. Architecture-only ends at 2 (clarify first if needed); document-only is 4; defect-only is 5. Honor explicitly requested start/finish after checking prerequisites. Do not expand a read-only task into repairs or architecture work into application development.
+全新完整开发：1 → 2 → 3 → 4 → 5。需求已确认但没有可用架构：2 → 3 → 4 → 5。已有可用架构：3 → 4 → 5。代码已完成、仅需检查：4 → 5。仅处理架构时在阶段 2 结束，必要时先澄清需求；仅核对文档使用阶段 4；仅审查缺陷使用阶段 5。核对前提条件后，遵守用户明确指定的起止阶段。不得将只读任务扩大为修复，也不得将架构工作扩大为业务代码开发。
 
-For architecture-only tasks, brainstorming's agreed design goes into the configuration through xyf-archify; do not require separate specification/plan files or repeat the discussion. Stage 3's six internal steps are distinct from this table. Module document verification comes before independent review; the main agent personally reviews the complete final change.
+仅处理架构时，由 xyf-archify 将 brainstorming 已确认的设计写入配置，不要求另建规格或计划文件，也不重复讨论已确认的内容。阶段 3 内部的六个步骤与上表的阶段划分不同。模块文档核对必须先于独立审查；主 Agent 必须亲自审查最终的完整改动。
 
-## Handoffs and rework
+## 交接与返工
 
-- Pass actual project/document paths, module/file scope, confirmations, authorization, and checked artifacts. Default architecture: `<project>/docs/archfiy/archify.json`. Honor user paths or existing `docs/archify/archify.json`; resolve competing data baselines. Never substitute the tool's empty template for project requirements.
-- Preserve pre-existing user edits. Record whether review targets uncommitted changes, merge-base differences, or a specified commit. Read-only review does not authorize fixes.
-- Reuse stage 3's complete main-agent checks at stages 4/5 only when document content, current source including uncommitted edits, coverage, and review baseline all match. A commit ID alone, partial checks, or developer self-review is insufficient. Recheck changed or missing coverage.
-- For authorized development, send findings back to stage 3, fix/test within scope, and repeat affected checks. Read-only tasks report findings and stop without writing.
-- Obtain confirmation before changing requirements/architecture, then return to stage 1/2. Never change documents to hide implementation deviations. Input changes invalidate affected prior checks.
-- Report environmental/missing-information blockers; continue independent work where possible. Do not retry endlessly or describe incomplete work as passed.
+- 交接实际的项目和文档路径、模块与文件范围、确认结果、授权及已检查的文件。默认架构路径为 `<project>/docs/archfiy/archify.json`。优先遵守用户指定的路径或已有的 `docs/archify/archify.json`；若有多个数据基准，先解决冲突。不得用工具的空模板代替项目需求。
+- 保留用户已有修改。记录审查对象是未提交改动、相对于共同祖先提交的差异，还是指定提交。只读审查不代表获得了修复授权。
+- 仅当文档内容、包含未提交修改的当前源码、覆盖范围和审查基准全部一致时，阶段 4、5 才能复用阶段 3 中主 Agent 的完整检查。只有提交 ID、部分检查或开发者自查均不够。对发生变化或未覆盖的部分重新检查。
+- 对已授权的开发任务，将发现的问题退回阶段 3，在范围内修复和测试，再执行受影响的检查。只读任务仅报告发现，随后停止，不写入文件。
+- 修改需求或架构前先取得确认，再返回阶段 1 或 2。不得修改文档来掩盖实现偏差。输入变化会使相关的既有检查结果失效。
+- 报告环境问题或信息缺失造成的阻碍；能够独立推进的工作继续进行。不得无休止重试，也不得将未完成的工作报告为通过。
 
-## Delivery
+## 交付
 
-Use short tables for actual stages, artifacts, checks run, and unresolved work. Separate data, source, service, and real-browser checks. State unrun tests honestly. Full delivery requires scoped implementation, required tests, document verification, and defect handling to be complete. A completed read-only review does not mean findings were fixed. Commit, push, merge, or publish only when explicitly requested.
+用简短表格报告实际完成的阶段、交付文件、已执行的检查和未解决工作。分别说明数据、源码、服务和真实浏览器检查。如实列出未运行的测试。完整交付要求范围内的实现、必要测试、文档核对和缺陷处理全部完成。完成只读审查不代表已修复其中发现的问题。只有用户明确要求时，才提交、推送、合并或发布。
 
-Runtime requirement: Node.js 22+ for the bundled editor. No npm dependencies are required. The optional brainstorming browser companion also uses Bash; it is not needed for the architecture editor or ordinary skill use.
+运行要求：内置编辑器需要 Node.js 22 或更高版本，无需安装 npm 依赖。可选的 brainstorming 浏览器辅助工具还需要 Bash；架构编辑器和普通技能使用不依赖该辅助工具。
