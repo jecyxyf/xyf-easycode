@@ -62,4 +62,4 @@ node html/scripts/build.mjs archify.json archify-export.html
 
 Rebuild the entry after source/template changes. Snapshots cannot overwrite index.html. Templates have guidance/skeleton pairs for canvas, module, group and data. `*.template.html` and `archifytemplate.template.jsonc` are guides; comments/examples are not formal project facts.
 
-Verify automatic loading, layout, edits, saves, refresh, restart, external conflicts, imports, malformed JSON and error messages through a real HTTP page in an isolated temporary project. API checks do not replace browser checks. Do not put test directories into the skill bundle or test data into formal architecture.
+Follow [xyf-web-language](../subskills/xyf-web-language/SKILL.md) for translation and delivery checks.
