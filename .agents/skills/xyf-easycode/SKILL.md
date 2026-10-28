@@ -15,8 +15,7 @@ metadata:
 
 | 任务 | 子技能 |
 | --- | --- |
-| 梳理需求，确认目标、范围和设计方案 | [brainstorming](subskills/brainstorming/SKILL.md) |
-| 设计、生成或修改框架，部署架构网页 | [xyf-archify](subskills/xyf-archify/SKILL.md) |
+| 采访需求，设计或调整框架，部署架构网页 | [xyf-archify](subskills/xyf-archify/SKILL.md) |
 | 按已确认的框架实现、修改或修复代码 | [xyf-code](subskills/xyf-code/SKILL.md) |
 | 翻译架构网页工具，切换网页语言 | [xyf-web-language](subskills/xyf-web-language/SKILL.md) |
 | 只读核对代码是否符合架构、需求或接口 | [xyf-archifycheck](subskills/xyf-archifycheck/SKILL.md) |
