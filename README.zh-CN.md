@@ -12,7 +12,7 @@ XYF EasyCode 将软件框架和接口变成可以查看、修改的图，再用�
 
 在目标项目中告诉 Agent：
 
-> 从 https://github.com/jecyxyf/xyf-easycode 安装 EasyCode 技能到本项目。先阅读仓库的 INSTALL.md，再按你使用的 Agent 完成安装。
+> 从 https://github.com/jecyxyf/xyf-easycode 安装 EasyCode 技能到本项目。按仓库 README 中的说明完成安装。
 
 手动安装时，下载所需版本的仓库，将 **`skills/` 内的六个目录全部复制**到目标 Agent 的技能目录。保持目录名和平级关系，完整保留所有文件，包括 `xyf-easycode-install/html/`。
 
@@ -23,7 +23,7 @@ XYF EasyCode 将软件框架和接口变成可以查看、修改的图，再用�
 | OpenCode | `.opencode/skills/` |
 | 其他 Agent | 使用该 Agent 文档规定的位置。 |
 
-仓库的 `skills/` 是源码目录，安装位置由 Agent 和版本决定。更新时保留已有的本地修改；安装后未显示时，重新加载技能或新开会话。安装和网页使用都无需 Node.js、npm 包、构建命令或本地服务器。完整步骤见 [INSTALL.md](INSTALL.md)。
+仓库的 `skills/` 是源码目录，安装位置由 Agent 和版本决定。更新时保留已有的本地修改；安装后未显示时，重新加载技能或新开会话。安装和网页使用都无需 Node.js、npm 包、构建命令或本地服务器。
 
 ## 使用方法
 
@@ -69,7 +69,6 @@ skills/
 ├── xyf-code/             编码流程
 └── review-agent/         代码审查
 AGENTS.md                 仓库协作规则
-INSTALL.md                安装说明
 README.md                 英文说明
 README.zh-CN.md           中文说明
 ```
