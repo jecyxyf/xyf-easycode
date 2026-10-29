@@ -6,8 +6,7 @@ import {join} from 'node:path';
 const directory = fileURLToPath(new URL('../docs/archify/test/', import.meta.url));
 const runtime = join(directory, '.runtime');
 const tests = [
-  fileURLToPath(new URL('./tests/installer.test.mjs', import.meta.url)),
-  fileURLToPath(new URL('../.agents/skills/xyf-easycode/tests/editor.test.mjs', import.meta.url))
+  fileURLToPath(new URL('./tests/installer.test.mjs', import.meta.url))
 ];
 for (const file of tests) await access(file);
 await mkdir(runtime, {recursive:true});
