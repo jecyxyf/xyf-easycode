@@ -37,11 +37,11 @@ Double-click [index.html](skills/xyf-easycode-install/html/index.html) to use th
 | `index.html` | Webpage entry; loads the language and architecture files. |
 | `software_architecture.js` | Project data: `globalThis.softwareArchitecture = <valid JSON>;`. |
 | `language.js` | Active interface language, Chinese by default. |
-| `language_zh.js` / `language_eng.js` | Chinese and English language configurations. |
+| `assert/language_zh.js` / `assert/language_eng.js` | Chinese and English language configurations. |
 | `assert/` | Editor components and styles. |
 | `module/` | Canvas, module, and layer templates. |
 
-Copy `language_eng.js` over `language.js` and refresh to use English. For another language, translate the configuration's text while preserving message keys and placeholders. Existing architecture data is translated only when requested.
+Copy `assert/language_eng.js` over `language.js` and refresh to use English. For another language, translate the configuration's text while preserving message keys and placeholders. Existing architecture data is translated only when requested.
 
 Save / Ctrl+S writes to the selected data file when the browser supports and grants file access. Otherwise, download a JS copy, replace `software_architecture.js`, and refresh. Saving checks for external changes and preserves unsaved edits on conflict. An HTML snapshot shares the current view without saving the original configuration. The optional name translation button uses an online service; ordinary editing and saving work offline.
 

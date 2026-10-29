@@ -12,8 +12,8 @@
 | `module/layer.js` | 分层模板 |
 | `index.html` | 唯一网页入口 |
 | `language.js` | 当前使用的语言，默认中文 |
-| `language_zh.js` | 中文配置，也用于补齐缺失的文字 |
-| `language_eng.js` | 英文配置 |
+| `assert/language_zh.js` | 中文配置，也用于补齐缺失的文字 |
+| `assert/language_eng.js` | 英文配置 |
 | `software_architecture.js` | 项目的架构数据 |
 | `references/architecture-data.jsonc` | 架构数据的字段说明和完整示例，供 Agent 参考 |
 
@@ -21,8 +21,8 @@
 
 ## 翻译和切换语言
 
-1. 用 `language_eng.js` 的内容覆盖 `language.js`，刷新网页即可显示英文。
-2. 用 `language_zh.js` 覆盖 `language.js`，刷新即可恢复中文。
+1. 用 `assert/language_eng.js` 的内容覆盖 `language.js`，刷新网页即可显示英文。
+2. 用 `assert/language_zh.js` 覆盖 `language.js`，刷新即可恢复中文。
 3. 增加其他语言时，复制一份语言文件，修改 `locale`、`name` 和 `messages` 中的文字，再放到 `language.js`。
 
 只翻译等号右侧配置中的文字，保留消息键和 `{name}`、`{count}` 等占位符。按钮、弹窗、字段、提示、校验错误和新建内容的默认名称都来自语言文件。已有项目、模块等数据的名称和说明由 `software_architecture.js` 保存，切换界面语言不会自动翻译这些内容。
