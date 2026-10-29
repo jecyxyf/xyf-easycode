@@ -6,48 +6,24 @@
 
 XYF EasyCode 将软件框架和接口变成可以查看、修改的图，再用确认后的架构约束 AI 编码。用户先看清模块、依赖、方法的输入输出、事件和预期行为，再让 Agent 开发、测试和检查。
 
-这是一套可安装的 Agent 技能，内置架构编辑网页，适用于 Codex、Claude Code、OpenCode，以及能够读取 `SKILL.md` 的其他 Agent。它通过文档核对、测试和代码审查，让实现紧扣确认后的设计。
+仓库包含六个 Agent 技能和独立架构网页，技能平级存放在 `skills/` 下。能否完整使用，取决于 Agent 的技能发现、文件读写、工具和代理能力；能读取 `SKILL.md` 不代表支持全部流程。
 
-## 告诉 Agent 安装
+## 安装
 
-在要开发的项目中发送：
+在目标项目中告诉 Agent：
 
-> 从 https://github.com/jecyxyf/xyf-easycode 安装 xyf-easycode 技能到本项目。先阅读仓库的 INSTALL.md，再按你使用的 Agent 完成安装。
+> 从 https://github.com/jecyxyf/xyf-easycode 安装 EasyCode 技能到本项目。先阅读仓库的 INSTALL.md，再按你使用的 Agent 完成安装。
 
-Agent 会下载仓库、运行安装脚本，并核对结果。安装包含全部子技能、模板和编辑工具，不修改业务代码，也不启动服务。完整流程见 [INSTALL.md](INSTALL.md)。从 GitHub 安装时，所用分支或版本中必须已经包含这些文件。
+手动安装时，下载所需版本的仓库，将 **`skills/` 内的六个目录全部复制**到目标 Agent 的技能目录。保持目录名和平级关系，完整保留所有文件，包括 `xyf-easycode-install/html/`。
 
-## 从本地仓库安装
-
-### 必需依赖：Node.js 22+
-
-**安装脚本和本地架构编辑器都需要 Node.js 22 或更高版本。** 用 `node --version` 检查。无需安装 npm 包，也不用运行 `npm install`。下载源码仓库时使用 Git。
-
-| 检测结果 | 安装流程 |
+| Agent | 项目内技能目录 |
 | --- | --- |
-| 已有 Node.js 22+ | 继续安装技能 |
-| 未安装或版本太低 | 说明原因，询问是否安装受支持的 Node.js 版本 |
-| 用户明确同意 | 按操作系统安装 Node.js，检查版本成功后继续安装技能 |
-| 用户拒绝或未回复 | 停止，不安装 Node.js，也不宣称技能已安装 |
+| Codex | `.agents/skills/` |
+| Claude Code | `.claude/skills/` |
+| OpenCode | `.opencode/skills/` |
+| 其他 Agent | 使用该 Agent 文档规定的位置。 |
 
-这个确认由执行安装的 Agent 在运行安装脚本前发起。安装 Node.js 时可能还需要操作系统的正常安装权限。也可以自行前往 [Node.js 官方下载页面](https://nodejs.org/en/download)安装，然后重试。
-
-已有 Node.js 后运行：
-
-```sh
-git clone https://github.com/jecyxyf/xyf-easycode.git
-cd xyf-easycode
-node scripts/install.mjs --agent codex --project /你的项目路径
-```
-
-将 `codex` 替换为 `claude-code` 或 `opencode` 即可安装给对应 Agent。使用 `--global` 替代 `--project`，供多个项目使用。其他 Agent 可用 `--skills-dir /技能目录` 指定其支持的位置。
-
-| Agent | 项目内安装 | 全局安装 |
-| --- | --- | --- |
-| Codex | `.agents/skills/xyf-easycode/` | `~/.agents/skills/xyf-easycode/` |
-| Claude Code | `.claude/skills/xyf-easycode/` | `~/.claude/skills/xyf-easycode/` |
-| OpenCode | `.opencode/skills/xyf-easycode/` | `$XDG_CONFIG_HOME/opencode/skills/xyf-easycode/`，未设置时使用 `~/.config/opencode/skills/xyf-easycode/` |
-
-相同内容重复安装不会修改文件。用 `--update` 更新本脚本管理的副本；如果用户改过其中的文件，脚本会停止并保留修改。已有不同内容且不属于本安装器管理的技能，也不会被覆盖。安装后未显示时，可重新加载技能或新开会话。
+仓库的 `skills/` 是源码目录，安装位置由 Agent 和版本决定。更新时保留已有的本地修改；安装后未显示时，重新加载技能或新开会话。安装和网页使用都无需 Node.js、npm 包、构建命令或本地服务器。完整步骤见 [INSTALL.md](INSTALL.md)。
 
 ## 使用方法
 
@@ -56,32 +32,46 @@ node scripts/install.mjs --agent codex --project /你的项目路径
 | 阶段 | 内容 |
 | --- | --- |
 | 确认需求 | 明确目标、范围、限制和预期行为 |
-| 展示架构 | 维护项目架构，启动可编辑的本地网页 |
-| 按约定开发 | 按依赖顺序实现，验证接口和实际行为 |
+| 展示架构 | 维护项目架构，打开可编辑的本地网页 |
+| 按约定开发 | 按依赖顺序实现，验证约定的行为 |
 | 核对文档 | 检查代码是否符合架构，提供文件位置和证据 |
 | 审查改动 | 查找新缺陷，修复已授权的问题，如实报告验证结果 |
 
-也可以只要求其中一步。已确认且仍有效的结论直接沿用。Agent 不应自行简化设计，也不能通过修改架构掩盖代码偏差。
+也可以只要求其中一步。已确认且仍有效的结论直接沿用。Agent 不应自行简化设计，也不能通过修改架构掩盖代码偏差。需要独立代理的流程必须有相应能力；无法执行的阶段应如实说明，不能宣称完成。
 
 ## 架构编辑器
 
-编辑器使用 Node.js 在本机运行，由 Agent 在处理架构任务时部署到目标项目。JSON 是用户和 Agent 共用的实现依据。
+双击 [index.html](skills/xyf-easycode-install/html/index.html) 即可使用内置网页。部署到项目时，使用 [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) 将 `skills/xyf-easycode-install/html/` 的**全部内容**复制到 `docs/xyf-easycode/html/`。已有部署只补缺失文件，保留项目数据、语言设置和网页定制。部署后打开 `docs/xyf-easycode/html/index.html`，默认中文。
 
-- 默认配置位置为 `docs/archify/archify.json`。已有或用户指定的架构目录继续沿用。
-- 部署后的 `ReadMe.md` 记录实际访问地址、五位数随机端口和重启命令。
-- 保存或 Ctrl+S 写回同一个 JSON；另存为下载副本；HTML 快照用于分享，不代表配置已保存。
-- 检测外部修改，发生冲突时保留未保存内容并提示。
-- 新建架构网页时，技能第一个问题先问网页使用什么语言，再由内置 `xyf-web-language` 翻译 `tools/` 后部署。可指定任意自然语言，英文名称保留英文，新架构的说明跟随所选语言；已有项目数据仅在用户要求时翻译。
-- 可选中译英按钮将所选名称发送给 MyMemory；正常编辑、保存不依赖该服务。
+| 文件或目录 | 作用 |
+| --- | --- |
+| `index.html` | 网页入口，自动加载语言和架构文件 |
+| `software_architecture.js` | 项目数据，格式为 `globalThis.softwareArchitecture = <合法 JSON>;` |
+| `language.js` | 当前界面语言，默认中文 |
+| `language_zh.js` / `language_eng.js` | 中文、英文语言配置 |
+| `assert/` | 网页组件和样式 |
+| `module/` | 画布、模块和分层模板 |
 
-部署说明见[编辑器文档](.agents/skills/xyf-easycode/tools/README.md)。
+用 `language_eng.js` 覆盖 `language.js`，刷新后显示英文。增加其他语言时，只翻译配置中的文字，保留消息键和占位符。已有架构数据仅在用户要求时翻译。
 
-## 开发与验证
+浏览器支持且获准读写本地文件时，保存或 Ctrl+S 会写回选定的数据文件；否则下载 JS 副本，替换 `software_architecture.js` 后刷新。保存时检查外部修改，发生冲突时保留未保存内容。HTML 快照用于分享当前页面，不代表原配置已保存。可选名称翻译按钮需要访问在线服务，普通编辑和保存支持离线使用。
 
-```sh
-npm run check
-npm test
-npm run build
+详细说明见[编辑器文档](skills/xyf-easycode-install/html/README.md)。
+
+## 仓库目录
+
+```text
+skills/
+├── xyf-easycode/          总入口
+├── xyf-easycode-install/  html/ 及网页部署到 docs/xyf-easycode/html/
+├── xyf-archify/           架构设计
+├── xyf-archifycheck/      架构与代码核对
+├── xyf-code/             编码流程
+└── review-agent/         代码审查
+AGENTS.md                 仓库协作规则
+INSTALL.md                安装说明
+README.md                 英文说明
+README.zh-CN.md           中文说明
 ```
 
-检查技能文件、内部链接、配置格式和 JavaScript 语法。安装器测试位于 `scripts/tests/installer.test.mjs`，覆盖实际安装、更新和用户改动保护。`npm test` 的运行目录为 `docs/archify/test/`，临时文件位于其中的 `.runtime/`，不进入 Git。实际浏览器检查单独报告。
+修改技能后检查名称、内部链接和共用文件。修改网页后直接用浏览器打开，验证受影响的功能。如实报告已执行的检查，以及尚未验证的能力。
