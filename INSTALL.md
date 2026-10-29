@@ -1,59 +1,56 @@
 # Install XYF EasyCode
 
-Follow this procedure when asked to install `xyf-easycode`. Install the **whole** `.agents/skills/xyf-easycode/` directory, including `subskills/` and `tools/`. Copying only `SKILL.md` leaves the skill incomplete.
+Install **all six skill directories inside `skills/`** into the target agent's skill directory. Keep them as siblings and copy their complete contents. Skills refer to each other and share `xyf-easycode-install/html/`.
 
-## Destination
+Installation is a file copy. No installer, Node.js, npm packages, build step, or server is required.
 
-Use the current user's target project and the agent you are running in. Default to project installation; global installation requires a user request. Do not infer the running agent from unrelated configuration directories.
+## Choose the destination
 
-| Agent | Installer argument | Project directory |
-| --- | --- | --- |
-| Codex | `--agent codex` | `.agents/skills/xyf-easycode/` |
-| Claude Code | `--agent claude-code` | `.claude/skills/xyf-easycode/` |
-| OpenCode | `--agent opencode` | `.opencode/skills/xyf-easycode/` |
-| Another client | `--skills-dir <documented-skills-directory>` | Supplied directory, followed by `xyf-easycode/` |
+Use the user's target project and the agent running the task. Default to project installation; use a global skill location only when the user requests it. Resolve the destination from that agent's documentation or current configuration.
 
-Resolve the actual project from the session. Respect project rules and existing authorization. Ask only if a necessary target, agent, or permission is unknown.
+| Agent | Project skill directory |
+| --- | --- |
+| Codex | `.agents/skills/` |
+| Claude Code | `.claude/skills/` |
+| OpenCode | `.opencode/skills/` |
+| Another client | Its documented skill directory. |
 
-## Obtain the source
+These installation locations are separate from this repository's `skills/` source directory. Check the installed version's official [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills), or [OpenCode](https://opencode.ai/docs/skills/) documentation. Respect project rules and existing authorization; ask only when a necessary target or choice is unknown.
 
-1. Run `node --version` and check Git. Node.js 22+ is required for both this installer and the editor; no npm packages are needed. If Node is missing or older than 22, tell the user and ask: **"EasyCode needs Node.js 22 or later. May I install a supported Node.js version on this computer, then continue installing EasyCode?"** Obtain an explicit answer using your agent's user-input tool or conversation. **A pending question, silence, or the original request to install the skill is not permission to install Node.js.**
-2. Only after the user agrees, install a supported Node.js release using the [official Node.js download/install instructions](https://nodejs.org/en/download) for the actual OS and architecture. Explain the chosen method and preserve existing user configuration. Respect normal OS/agent permission prompts. If the user declines, has not answered, or installation fails, stop dependent work and report the status without claiming installation succeeded. Open a fresh shell or refresh the process PATH as appropriate, run `node --version` again, and continue only when it reports 22 or later. Do not uninstall an existing Node version or change unrelated settings to bypass a failure. If Git is absent, obtain permission for its installation or use the agent's available archive-download tools to obtain the same requested source; do not silently install another tool.
-3. Use a matching existing checkout, or clone `https://github.com/jecyxyf/xyf-easycode.git` into a fresh temporary directory. Preserve a requested branch, tag, or commit; do not silently substitute `main`.
-4. Read this file from the checkout before running its installer. Use absolute paths in actual commands.
+## Copy the skills
 
-```sh
-git clone --depth 1 https://github.com/jecyxyf/xyf-easycode.git <temporary-checkout>
+1. Use a matching existing checkout, or download the requested version of `https://github.com/jecyxyf/xyf-easycode`. Preserve a requested branch, tag, or commit. Read this file from that version.
+2. Compare existing destination directories before copying. Keep identical files; preserve local changes and resolve differences before replacing files. Do not delete existing skills to bypass a conflict.
+3. Copy each directory below into the chosen skill directory, keeping all nested files. Copy the six directories themselves, without adding another `skills/` layer.
+
+```text
+<agent-skill-directory>/
+├── xyf-easycode/
+├── xyf-easycode-install/
+├── xyf-archify/
+├── xyf-archifycheck/
+├── xyf-code/
+└── review-agent/
 ```
 
-## Install and verify
+Do not copy the repository's `AGENTS.md` into the target project as part of skill installation; it describes work on this repository.
 
-For the current project:
+## Verify the installation
 
-```sh
-node <checkout>/scripts/install.mjs --agent codex --project <target-project>
-```
+| Check | Expected result |
+| --- | --- |
+| Skill entries | All six directories contain their `SKILL.md`. |
+| File copy | Installed contents match the chosen source version, apart from explicitly preserved local changes. |
+| Shared resources | `xyf-easycode-install/html/` is complete. |
+| Relative links | Links resolve to installed sibling skills and shared resources. |
+| Agent discovery | Reload skills or start a new session as needed, then verify the available skills. |
 
-For global installation explicitly requested by the user:
-
-```sh
-node <checkout>/scripts/install.mjs --agent codex --global
-```
-
-Replace `codex` with the running agent from the table. For another client, use `--skills-dir` instead of `--agent`, `--project`, or `--global`.
-
-The installer checks the complete bundle and verifies SHA-256 hashes after copying. An identical installation makes no changes. Different existing files are preserved. `--update` only updates an installer-managed copy whose files still match its recorded hashes. Never delete an existing skill to bypass a conflict.
-
-Verify without writing:
-
-```sh
-node <checkout>/scripts/install.mjs --agent codex --project <target-project> --check
-```
-
-Report the actual path and verification result. Suggest reloading skills or starting a new session if discovery needs it. Do not claim another agent loaded the skill unless it was actually run.
+Report the actual directory and checks performed. File checks do not prove that a client loaded or executed a skill. Do not claim support for an untested agent or version. Some workflows require independent agents or other tools; report unavailable capabilities rather than claiming those stages succeeded.
 
 ## After installation
 
-Read the installed `SKILL.md` when the user requests EasyCode. Resolve all bundled references relative to that file. No other skill package, npm dependencies, or cloud service is required for ordinary use.
+Use [xyf-easycode](skills/xyf-easycode/SKILL.md) as the main entry. In the installed copy, read `<agent-skill-directory>/xyf-easycode/SKILL.md` and resolve links relative to each file.
 
-Installation does not authorize application development or create an architecture. For architecture work, follow the bundled `subskills/xyf-archify/SKILL.md` to maintain the real project configuration and deploy its editor. Preserve existing architecture, stable IDs, and unsaved edits.
+For architecture work, follow [xyf-archify](skills/xyf-archify/SKILL.md). For webpage deployment, use [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to copy the contents of `xyf-easycode-install/html/` into the project's `docs/xyf-easycode/html/` directory. In an existing deployment, add only missing files and preserve architecture data, language settings, and customizations. Double-click `docs/xyf-easycode/html/index.html`; it loads `language.js` and `software_architecture.js` from the same directory and defaults to Chinese for a new deployment.
+
+Installing skills does not itself start application development or replace project architecture. See the [editor documentation](skills/xyf-easycode-install/html/README.md) for language and saving behavior.
