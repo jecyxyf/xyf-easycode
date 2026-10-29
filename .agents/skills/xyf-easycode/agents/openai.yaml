@@ -1,4 +1,0 @@
-interface:
-  display_name: "XYF EasyCode"
-  short_description: "通过可视化架构，让 AI 编码始终贴合已确认的用户需求"
-  default_prompt: "使用 $xyf-easycode 展示架构和接口，再按我确认的需求完成开发。"
