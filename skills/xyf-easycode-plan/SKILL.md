@@ -11,6 +11,10 @@ description: 先了解软件现状，以头脑风暴式采访明确需求，提�
 
 JS 配置用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 从文本解析，不执行配置代码；旧 JSON 用 `JSON.parse`。字段见[数据说明](../xyf-easycode-install/html/references/architecture-data.jsonc)。
 
+## 计划文档
+
+规划任务独立生成 `YYYYMMDD-HHmmss-4位随机码` ID，文件重名则重生成；恢复沿用自身 ID。保存到 `<project>/docs/xyf-easycode/plans/<任务ID>_plan.md`。开始时建档，每轮沟通有进展、每批工作及交接前由主代理更新。记录项目与架构路径、内容基准、需求与候选方案、确认及授权、进度和下一步；恢复先读再核对实际内容。保留其他任务，由编码技能验收后清理本任务文档。
+
 ## 执行流程
 
 | 阶段 | 要求 |
