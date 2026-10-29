@@ -57,8 +57,8 @@ skills/
 ├── xyf-easycode-install/  html/ and webpage deployment to docs/xyf-easycode/html/
 ├── xyf-easycode-plan/     Architecture improvement planning and updates
 ├── xyf-archify/           Initial architecture design and webpage deployment
-├── xyf-archifycheck/      Architecture and code comparison
-├── xyf-code/             Implementation workflow
+├── xyf-easycode-check/    Architecture and code comparison
+├── xyf-easycode-code/     Implementation workflow
 └── review-agent/         Code review
 AGENTS.md                 Repository collaboration rules
 README.md                 English documentation
