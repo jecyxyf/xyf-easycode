@@ -1,66 +1,42 @@
 ---
 name: xyf-htmlinit
-description: 在目标项目的架构网页尚未部署完成时，准备工具副本、确定网页语言、生成入口并启动本地服务。已有有效架构配置直接沿用，没有配置时创建空白配置。
+description: 部署项目的软件架构 HTML 开发环境，包括工具复制、网页翻译、空白配置、网页生成和本地服务启动。已部署则跳过。
 ---
 
-# XYF 网页初始化
+# 33 架构网页环境部署
 
-为目标项目部署可编辑的架构网页，绑定同一份 `archify.json`，交付实际访问地址和重启方式。复用现有[网页工具](../../tools/README.md)，不修改业务源码，也不生成业务架构方案。需求和架构设计由 [xyf-archify](../xyf-archify/SKILL.md) 负责；本技能可单独调用，不改变其现有流程。
+你做为自身的应用部署工程师需要帮助用户完成软件架构Html工具的部署
 
-## 使用前提
+目标目录为 `<project>/docs/archify/`，下文简称 `<workspace>`。
 
-- 以目标工作区的架构网页是否部署完成为准，不以业务项目新旧或技能是否安装判断。技能自带的工具和模板不算部署结果。
-- **网页能够访问，并正确加载目标工作区的 `archify.json`，才算部署完成。** 已完成时沿用并交付地址；未完成时继续初始化。
+**部署前只检查下方目录结构。** 结构符合就报告“已部署，跳过”，立即结束本技能，不再执行后续步骤。
 
-## 1. 确定目标与语言
+| 步骤 | 执行要求 |
+|---|---|
+| 1. 检查现有环境 | 只确认下方列出的文件和目录是否存在，不检查子目录内部文件、文件内容或服务状态。结构符合则跳过；有缺失才补齐，保留已有配置和定制。额外文件不影响判断。 |
+| 2. 确定语言和环境 | 新网页先询问语言，用户已指定则沿用。要求 Node.js ≥ 22，无需安装 npm 包；安装 Node.js 前须取得明确同意。 |
+| 3. 复制并翻译工具 | 将本技能的 `../../tools/` 复制到 `<workspace>/tools/`。调用 [xyf-web-language](../xyf-web-language/SKILL.md)，只翻译此副本中的显示文字和说明，保留英文名称、变量、字段、路径及布局。 |
+| 4. 准备配置 | 已有有效 `archify.json` 直接沿用；没有时用 `Model.createProject()` 创建独立 ID 的空白配置，设置项目绝对路径，模块、分层和关系留空。使用 `files.mjs` 写入并回读核对；配置冲突时不得覆盖。 |
+| 5. 生成并启动 | 翻译检查通过后生成 `index.html`，将 `tools/html/` 复制到 `<workspace>/html/`，再启动正式服务。端口使用 `10000–65535` 内可用的随机整数，通过持久终端保持运行。 |
+| 6. 检查并交付 | 检查配置、网页、实际地址、语言及数据一致性。用表格交付目录、配置路径、访问地址、重启命令和检查结果；未完成的检查如实注明。 |
 
-- `<project>` 默认为当前项目的绝对路径；`<workspace>` 默认为 `<project>/docs/archify/`。沿用用户指定的目录，写入前核对实际路径，未经允许不超出项目目录。
-- 检查目标工作区的网页、配置、服务和访问说明，确认部署状态。发现旧版 `archify.js` 或多个冲突的配置来源时，先确认数据基准，不用空模板替换。
-- 新建网页时，先问“架构网页使用什么语言？”。沿用用户已明确指定的语言，不重复询问，也不根据对话语言或工具模板推断。
-- 检查 Node.js 版本，要求 22 或更高版本，无需安装 npm 包。缺失或版本过低时，说明要求并取得用户明确同意后才能安装 Node.js；未同意或安装失败时停止依赖该环境的工作。
+只需确认以下文件和目录存在：
 
-## 2. 准备工具副本
+    docs/archify/
+    ├── archify.json
+    ├── index.html
+    ├── ReadMe.md
+    ├── html/
+    └── tools/
 
-- 以本技能目录解析 `../../tools/`，将其复制到 `<workspace>/tools/`。技能安装目录只作来源，不在其中翻译、部署或启动服务。
-- 已有工具副本、页面或 `html/` 时，先核对现状并保留定制；不将初始化当作覆盖更新。已有页面可用时直接沿用，仅补齐本次需要的内容。
-- 需要翻译时，调用 [xyf-web-language](../xyf-web-language/SKILL.md)，明确指定实际目标为 `<workspace>/tools/`，只处理这个副本。沿用已确定的语言，保留英文名称、标识符、数据约定和布局。翻译及该技能要求的基础检查完成后再生成正式入口。
+在 `<workspace>` 内执行：
 
-## 3. 准备唯一配置
+- 生成：`node tools/html/scripts/build.mjs --runtime index.html`
+- 将 `tools/html/` 复制到 `html/` 后启动：`node html/server.mjs`
+- 检查配置：`node html/scripts/check.mjs archify.json`
+- 检查网页：`node html/scripts/check.mjs index.html`
+- 检查服务：`node html/scripts/check.mjs --url "<实际地址>"`
 
-- `<workspace>/archify.json` 是页面绑定的唯一配置。使用工具副本的[文件工具](../../tools/html/scripts/files.mjs)读写和校验；已有有效配置直接沿用，保留内容、ID 和布局，不覆盖重建。
-- 用户提供配置来源时先校验；若与目标已有配置冲突，先确认数据基准，不直接覆盖。
-- 目标配置不存在且没有指定配置来源时，使用副本中[模型](../../tools/html/assets/model.js)的 `Model.createProject()` 创建独立 ID 的空白配置，将 `repository.path` 设为 `<project>` 的绝对路径。显示名称及说明沿用所选网页语言；模块、分层和关系保持为空。
-- 新配置通过 `writeProjectFile(..., {expectedVersion: null})` 写入，再回读比较。若文件在此期间出现或变化，保留现有文件并处理冲突。空白配置只表示网页已初始化，不代表需求或架构已确认。
+服务必须绑定 `<workspace>/archify.json`，不得从 `tools/html/server.mjs` 启动。
 
-## 4. 生成并启动网页
-
-首次初始化时，用已准备的工具副本生成正式入口：
-
-```sh
-node "<workspace>/tools/html/scripts/build.mjs" --runtime "<workspace>/index.html"
-```
-
-将副本的 `html/` 复制到 `<workspace>/html/`，再从正式工作区启动：
-
-```sh
-node "<workspace>/html/server.mjs"
-```
-
-- 服务必须读取 `<workspace>/archify.json`；不得从 `<workspace>/tools/html/server.mjs` 启动，否则会绑定工具副本中的模板配置。
-- 启动前检查已有访问说明和服务的 `/health`。只有 `root`、`projectFile` 与当前工作区完全一致时才复用已有服务，避免重复启动。
-- 新服务默认使用可用的随机五位数端口 `10000–65535`。通过 Agent 的持久终端保持服务运行，使用实际启动结果中的地址。启动会更新工作区的 `ReadMe.md`，记录地址、端口和重启命令，并保留生成区块以外的用户说明。
-- 用户只要求生成文件时，省略启动及依赖服务的检查，交付启动命令，不宣称已有可访问的服务。
-
-## 5. 检查与交付
-
-使用正式工作区的检查工具：
-
-```sh
-node "<workspace>/html/scripts/check.mjs" "<workspace>/archify.json"
-node "<workspace>/html/scripts/check.mjs" "<workspace>/index.html"
-node "<workspace>/html/scripts/check.mjs" --url "<实际访问地址>"
-```
-
-核对页面语言、配置绝对路径，以及服务返回的数据和磁盘配置是否一致。不为验证而填充业务架构。文件和服务检查不等于浏览器交互验收；未完成的检查如实说明。
-
-用简短表格交付项目目录、工作区、网页语言、配置文件、实际地址（如已启动）、重启命令及检查结果。完成初始化后停止，不自动采访需求、生成业务架构或开始编码。
+用户只要求生成文件时，省略启动和服务检查。部署完成即结束，不自动设计业务架构或开始编码。
