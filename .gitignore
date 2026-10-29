@@ -1,8 +1,0 @@
-node_modules/
-.DS_Store
-Thumbs.db
-*.tmp
-docs/archify/test/.runtime/
-.easycode-install.json
-.xyf-easycode-stage-*/
-.xyf-easycode-backup-*/
