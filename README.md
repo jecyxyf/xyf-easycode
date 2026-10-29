@@ -6,7 +6,7 @@
 
 XYF EasyCode makes software architecture and interfaces visible and editable, then uses the agreed architecture to guide implementation, testing, and review. Inspect modules, dependencies, method inputs and outputs, events, and expected behavior before the agent writes code.
 
-The repository contains six Agent Skills and a standalone architecture editor. Skills are stored side by side under `skills/`. Support depends on the agent's skill discovery, file access, tools, and delegation capabilities; reading `SKILL.md` alone does not guarantee every workflow will run.
+The repository contains seven Agent Skills and a standalone architecture editor. Skills are stored side by side under `skills/`. Support depends on the agent's skill discovery, file access, tools, and delegation capabilities; reading `SKILL.md` alone does not guarantee every workflow will run.
 
 ## Install
 
@@ -27,6 +27,8 @@ Open your target project and ask your agent:
 | Review changes | Find regressions, fix authorized issues, and report actual verification. |
 
 You can request one stage. Valid confirmed decisions and checks are reused. Implementation must not silently simplify the design or rewrite architecture to hide a mismatch. Workflows requiring independent agents need that capability; unavailable stages must be reported rather than claimed as complete.
+
+[xyf-easycode-plan](skills/xyf-easycode-plan/SKILL.md) studies the current architecture and user requirements, proposes module and interface improvements, updates the architecture, and ends before coding.
 
 ## Architecture editor
 
@@ -53,7 +55,8 @@ See the [editor documentation](skills/xyf-easycode-install/html/README.md) for d
 skills/
 ├── xyf-easycode/          Main entry
 ├── xyf-easycode-install/  html/ and webpage deployment to docs/xyf-easycode/html/
-├── xyf-archify/           Architecture design
+├── xyf-easycode-plan/     Architecture improvement planning and updates
+├── xyf-archify/           Initial architecture design and webpage deployment
 ├── xyf-archifycheck/      Architecture and code comparison
 ├── xyf-code/             Implementation workflow
 └── review-agent/         Code review
