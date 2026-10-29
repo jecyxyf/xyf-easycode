@@ -1,6 +1,6 @@
 ---
-name: xyf-archifycheck
-description: 只读核对实际代码是否符合 EasyCode 架构或指定的需求和接口，报告差异及证据；已获授权的修复使用 xyf-code。
+name: xyf-easycode-check
+description: 只读核对实际代码是否符合 EasyCode 架构或指定的需求和接口，报告差异及证据；已获授权的修复使用 xyf-easycode-code。
 ---
 
 # XYF 架构核对
@@ -35,6 +35,6 @@ description: 只读核对实际代码是否符合 EasyCode 架构或指定的需
 
 默认只做静态、只读检查：不安装工具、不构建、不运行测试、不启动服务，也不写报告文件。任务中已有的运行检查授权仍然有效；按项目工具和规则执行，并记录实际命令、结果和覆盖范围。不得将历史检查、模拟检查或未运行的检查算作本次通过。
 
-不得通过修改代码或文档消除差异。用户要求的修复交给 [xyf-code](../xyf-code/SKILL.md)；已确认的架构变更交给 [xyf-archify](../xyf-archify/SKILL.md)。
+不得通过修改代码或文档消除差异。用户要求的修复交给 [xyf-easycode-code](../xyf-easycode-code/SKILL.md)；已确认的架构变更交给 [xyf-archify](../xyf-archify/SKILL.md)。
 
 先报告范围和主要发现，再用表格列出需求、文档位置、源码证据、结果，以及差异或处理建议。结果分为“符合”（`Conforms`）、“不符合”（`Does not conform`）和“无法确认”（`Cannot confirm`），并附文件路径、行号和稳定 ID。说明哪些是静态证据，哪些来自实际运行。只要已证实存在不一致，整体结果就是“不符合”；若没有已证实的不一致，但证据或覆盖不足，则为“无法确认”。只有完整覆盖且证据充分时，才能判定“符合”。单独列出未检查的模块、未运行的测试和阻碍。静态符合不代表运行验收通过。
