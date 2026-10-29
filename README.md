@@ -12,7 +12,7 @@ The repository contains six Agent Skills and a standalone architecture editor. S
 
 Open your target project and ask your agent:
 
-> Install the EasyCode skills from https://github.com/jecyxyf/xyf-easycode into this project. Read the repository's INSTALL.md and follow it for your agent.
+> Install the EasyCode skills from https://github.com/jecyxyf/xyf-easycode into this project. Follow the installation instructions in the repository's README.
 
 To install manually, download the requested repository version and copy **all six directories inside `skills/`** into the target agent's skill directory. Keep their names, sibling layout, and complete contents, including `xyf-easycode-install/html/`.
 
@@ -23,7 +23,7 @@ To install manually, download the requested repository version and copy **all si
 | OpenCode | `.opencode/skills/` |
 | Other agents | Use the location documented for that agent. |
 
-The repository's `skills/` is the source layout; installation locations depend on the agent and version. Preserve existing local changes when updating. Reload skills or start a new session if needed. Installation and the editor require no Node.js, npm packages, build command, or local server. See [INSTALL.md](INSTALL.md).
+The repository's `skills/` is the source layout; installation locations depend on the agent and version. Preserve existing local changes when updating. Reload skills or start a new session if needed. Installation and the editor require no Node.js, npm packages, build command, or local server.
 
 ## Use EasyCode
 
@@ -69,7 +69,6 @@ skills/
 ├── xyf-code/             Implementation workflow
 └── review-agent/         Code review
 AGENTS.md                 Repository collaboration rules
-INSTALL.md                Installation procedure
 README.md                 English documentation
 README.zh-CN.md           Chinese documentation
 ```
