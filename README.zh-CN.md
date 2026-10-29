@@ -84,4 +84,4 @@ npm test
 npm run build
 ```
 
-检查技能文件、内部链接、配置格式和 JavaScript 语法。安装器测试位于 `scripts/tests/installer.test.mjs`；编辑器测试位于 `.agents/skills/xyf-easycode/tests/editor.test.mjs`，随技能分发。测试覆盖实际安装、更新保护，以及网页服务的部署、加载、保存和冲突处理。`npm test` 的运行目录为 `docs/archify/test/`，临时文件位于其中的 `.runtime/`，不进入 Git。实际浏览器检查与接口测试分别报告。
+检查技能文件、内部链接、配置格式和 JavaScript 语法。安装器测试位于 `scripts/tests/installer.test.mjs`，覆盖实际安装、更新和用户改动保护。`npm test` 的运行目录为 `docs/archify/test/`，临时文件位于其中的 `.runtime/`，不进入 Git。实际浏览器检查单独报告。

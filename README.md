@@ -87,7 +87,6 @@ See the [editor documentation](.agents/skills/xyf-easycode/tools/README.md) for 
   SKILL.md                   Workflow and routing
   subskills/                 Design, architecture, coding, checks, review
   tools/                     Editor, data model, server and deployment
-  tests/editor.test.mjs       Editor regression tests
 scripts/install.mjs          Cross-platform installer
 scripts/check.mjs            Bundle and repository checks
 scripts/tests/               Installer regression tests
@@ -103,6 +102,6 @@ npm test
 npm run build
 ```
 
-Checks validate the bundle, local documentation links, data format, and JavaScript syntax. Installer tests live in `scripts/tests/installer.test.mjs`; editor tests ship with the skill in `.agents/skills/xyf-easycode/tests/editor.test.mjs`. They exercise installation, updates, editor deployment, loading, saving, and conflicts. `npm test` runs from `docs/archify/test/`, with temporary files under its ignored `.runtime/` directory. Browser checks are reported separately from API tests.
+Checks validate the bundle, local documentation links, data format, and JavaScript syntax. Installer tests live in `scripts/tests/installer.test.mjs`. They exercise installation, updates, and protection of user changes. `npm test` runs from `docs/archify/test/`, with temporary files under its ignored `.runtime/` directory. Browser checks are reported separately.
 
 Installation paths follow the official [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills), and [OpenCode](https://opencode.ai/docs/skills/) documentation.
