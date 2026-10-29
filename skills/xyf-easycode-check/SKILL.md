@@ -1,6 +1,6 @@
 ---
 name: xyf-easycode-check
-description: 按模块并行核对代码与架构，持续保存检查计划和证据；最终只报告不符合项及原因，不检查测试要求。
+description: 按模块并行核对代码、测试与架构，保存检查计划和证据；最终只报告不符合项及原因。
 ---
 
 # 架构与代码核对
@@ -11,7 +11,7 @@ description: 按模块并行核对代码与架构，持续保存检查计划和�
 
 JS 用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 解析，旧 JSON 用 `JSON.parse`，用 [Model.validate](../xyf-easycode-install/html/assert/model.js) 校验；不执行配置、不补默认值。其他文档按条款核对，字段见[数据说明](../xyf-easycode-install/html/references/architecture-data.jsonc)。
 
-静态检查，不检查测试要求或运行测试；代码、架构和状态只读，仅主代理写任务计划。
+静态核对，不运行测试；代码、架构和状态只读，仅主代理写任务计划。
 
 ## 模块检查项
 
@@ -25,6 +25,7 @@ JS 用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 
 | 方法及输入输出 | 方法存在且可调用，职责、参数、返回值符合约定 |
 | 流程与错误处理 | 顺序、分支、处理和错误传播符合约定 |
 | 消息事件 | 名称、方向、消息参数、流程、发送接收关系一致 |
+| 测试 | 规定步骤、断言及预期结果有覆盖；测试及产物在 `<project>/docs/xyf-easycode/tests/`，静态检查不代表运行通过 |
 | 实现证据 | 来源路径、行号、代码对象、状态与当前内容一致 |
 
 方法在 `interfaces` 中。空输入输出须查清约定；缺失或空默认值不代表零或空字符串。`relations` 仅是画布标注，状态标记不能替代代码证据。只按明确约定判定，布局和颜色仅查配置合法性。
