@@ -5,6 +5,8 @@ description: Perform a read-only, defect-first review of a specified code change
 
 # Review Agent
 
+确定项目后，运行前及每批写入前重读 `<project>/docs/xyf-easycode/PromptsRules.md`；未部署先读[模板](../xyf-easycode-install/PromptsRules.md)并说明缺项，复制交给 install 按授权处理。读取失败则暂停。
+
 Inspect the requested target directly and return every finding that the author would likely fix.
 Do not modify files, create commits, push branches, post review comments, or delegate the review
 to another agent.
