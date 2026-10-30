@@ -1,15 +1,15 @@
 ---
 name: xyf-easycode-check
-description: 按模块并行核对代码、测试与架构，保存检查计划和证据；最终只报告不符合项及原因。
+description: 按模块核对代码、测试与架构，查证差异，输出带证据、修复任务和验收要求的可执行计划。
 ---
 
 # 架构与代码核对
 
 ## 依据与边界
 
-沿用项目、架构和范围；未限定模块时覆盖全部。默认 `<project>/docs/xyf-easycode/html/software_architecture.js`，已有路径继续沿用。核实源码入口和路径，解决基准冲突，不把模板当需求；排除无关依赖、缓存和生成文件。
+沿用项目、架构和范围；未限定则查全部。默认 `<project>/docs/xyf-easycode/html/software_architecture.js`，已有路径继续沿用。核实源码入口和路径，解决基准冲突，不把模板当需求；排除无关依赖、缓存和生成文件。
 
-JS 用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 解析，旧 JSON 用 `JSON.parse`，用 [Model.validate](../xyf-easycode-install/html/assert/model.js) 校验；不执行配置、不补默认值。其他文档按条款核对，字段见[数据说明](../xyf-easycode-install/html/references/architecture-data.jsonc)。
+JS 用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 解析，旧 JSON 用 `JSON.parse`，用 [Model.validate](../xyf-easycode-install/html/assert/model.js) 校验；不执行配置、不补默认值；其他文档按条款核对。字段见[数据说明](../xyf-easycode-install/html/references/architecture-data.jsonc)。
 
 静态核对，不运行测试；代码、架构和状态只读，仅主代理写任务计划。
 
@@ -32,19 +32,20 @@ JS 用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 
 
 ## 并行查证与计划
 
-检查任务独立生成 `YYYYMMDD-HHmmss-4位随机码` ID，文件重名则重生成；恢复或复查沿用自身 ID。保存到 `<project>/docs/xyf-easycode/plans/<检查ID>_check.md`。主代理开始时建档，记录项目与架构路径、关联规划路径（如有）、授权、基准、检查项及负责人、进度、证据、差异和下一步。每批结果及交接前保存，只更新对应条目，保留其余进度。恢复先读记录再核对实际内容；由编码技能验收后清理。
+独立任务以本地时间 `yyyy_mm_dd_hh_mm_ss_ms` 为 ID（24 小时制，毫秒固定 3 位），保存为 `<project>/docs/xyf-easycode/plans/<任务ID>.md`。重名重新取时间，恢复或复查沿用 ID；被 code 调用时更新其指定计划。
+主代理建档，记录项目、架构及关联计划完整路径、初始基准（含未提交修改）、检查项、负责人、覆盖和证据。差异转成修复任务，逐项列问题、原因、文件行号、写入范围、改法、依赖顺序、验收、授权、进度和下一步。待确认项标明且不执行。每批及交接前更新对应条目，保留其他进度；恢复先读再核实内容，编码验收后清理。
 
 | 阶段 | 要求 |
 | --- | --- |
-| 建立清单 | 一次解析架构，记录文档、源码、配置内容基准及未提交修改；按模块和成员 ID 列全检查项，用 `rg` 批量定位、按文件集中阅读。 |
-| 分配检查 | 按模块或依赖组分给子代理，提供路径、基准、条款、检查项、授权；每项一位负责人。公共组件指定一人检查，调用方分别核对调用行为；小任务或代理不可用时串行。 |
+| 建立清单 | 一次解析架构，记录文档、源码、配置内容基准及未提交修改；按模块和成员 ID 列全检查项，`rg` 定位、按文件阅读。 |
+| 分配检查 | 按模块或依赖组分给子代理，提供路径、基准、条款、检查项、授权；每项一位负责人。公共组件一人检查，调用方核对调用行为；小任务或代理不可用时串行。 |
 | 追查证据 | 沿入口、注册、调用和数据流查证，回传覆盖清单、证据和差异。疑点继续查；缺权限或业务决定时提出具体问题，继续其余检查，不猜测。 |
-| 汇总复核 | 主代理复核差异、跨模块调用和完整覆盖，冲突补查、缺项补齐；最终核对基准，变化涉及的检查重做。 |
+| 汇总复核 | 主代理复核差异、跨模块调用及完整覆盖，冲突补查、缺项补齐；核对基准，受影响项重查。 |
 
-首次完整检查。后续仅复用有完整记录且相关条款、源码、依赖、配置及覆盖范围一致的检查项；变化及受影响调用方复查。
+首次完整检查。后续仅复用记录完整且条款、源码、依赖、配置和覆盖不变的项；变化及受影响调用方复查。
 
 ## 交付
 
-完成后只列：**模块／成员：不符合项；原因：约定与实际差异（文件及行号）。** 同根因合并并列全受影响成员。完整覆盖且无差异时只回复“本次核对未发现不符合项”。未查完不提前发布无问题结论。
+交付计划路径及摘要，供 [code](../xyf-easycode-code/SKILL.md) 直接执行。同根因合并并列全受影响成员。完整覆盖且无差异时，计划写明“未发现不符合项，无需修复”；未查完标为未完成，不声称无问题。
 
-用户要求的修复交给 [code](../xyf-easycode-code/SKILL.md)，已批准的架构调整交给 [plan](../xyf-easycode-plan/SKILL.md)。
+已批准的架构调整交给 [plan](../xyf-easycode-plan/SKILL.md)，不自动修复。
