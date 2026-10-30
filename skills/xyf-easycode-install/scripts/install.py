@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deploy the bundled editor and prompt rules; never overwrite existing files."""
+"""Deploy the bundled editor and copy the project's prompt rules."""
 
 import argparse
 from collections import Counter
@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import sys
 import tempfile
 import time
@@ -146,40 +147,6 @@ def publish_missing_file(destination, data):
         os.link(temporary, destination)
 
 
-def read_rules(path):
-    data = path.read_bytes()
-    try:
-        text = data.decode("utf-8-sig")
-    except UnicodeError as error:
-        raise ValueError("Prompt rules must use UTF-8: " + str(path)) from error
-    if not text.strip():
-        raise ValueError("Prompt rules must not be empty: " + str(path))
-    return data
-
-
-def plan_rules(project, report):
-    workspace = project / "docs" / "xyf-easycode"
-    destination = workspace / RULES_NAME
-    source = Path(__file__).resolve().parent.parent / RULES_NAME
-    rules = report["rules"] = {"path": str(destination), "status": "not_checked"}
-    # Check all ancestors before resolving, so directory links cannot hide redirects.
-    for directory in (*reversed(project.parents), project, project / "docs", workspace):
-        if kind(directory) not in ("missing", "directory"):
-            raise ValueError("Directory conflict (preserved): " + str(directory))
-    if kind(source) != "file":
-        raise ValueError("Missing or unsupported prompt rules template: " + str(source))
-    data = read_rules(source)
-    actual = kind(destination)
-    if actual == "file":
-        read_rules(destination)
-        rules.update(status="preserved", checks={"utf8_nonempty": "passed"})
-        return destination, None
-    if actual != "missing":
-        raise ValueError("Prompt rules path conflict (preserved): " + str(destination))
-    rules["status"] = "pending"
-    return destination, data
-
-
 def install_editor(args, report):
     project = Path(args.project).expanduser().resolve()
     workspace = project / "docs" / "xyf-easycode"
@@ -274,43 +241,22 @@ def install_editor(args, report):
 
 
 def install(args, report):
-    project = Path(args.project).expanduser().absolute()
-    rules_path, rules_data = plan_rules(project, report)
-    if args.rules_only:
-        report.update(
-            status="skipped", workspace=str(rules_path.parent), copied=0,
-            editor_status="not_requested",
-        )
-    else:
-        install_editor(args, report)
-        report["editor_status"] = report["status"]
-
-    if rules_data is not None:
-        try:
-            rules_path.parent.mkdir(parents=True, exist_ok=True)
-            publish_missing_file(rules_path, rules_data)
-            if read_rules(rules_path) != rules_data:
-                raise ValueError("Copied prompt rules verification failed: " + str(rules_path))
-        except (OSError, ValueError):
-            report["rules"]["status"] = "error"
-            raise
-        report["rules"].update(
-            status="installed",
-            checks={"utf8_nonempty": "passed", "copied_contents": "passed"},
-        )
-        report["status"] = "installed"
+    install_editor(args, report)
+    source = Path(__file__).resolve().parent.parent / RULES_NAME
+    destination = Path(report["workspace"]) / RULES_NAME
+    if kind(destination) not in ("missing", "file"):
+        raise ValueError("File conflict (preserved): " + str(destination))
+    shutil.copyfile(source, destination)
+    report["rules_path"] = str(destination)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True, help="Target project directory")
-    parser.add_argument("--rules-only", action="store_true", help="Deploy prompt rules without the editor or language setup")
     language = parser.add_mutually_exclusive_group()
     language.add_argument("--language", choices=sorted(LANGUAGES), help="Confirmed UI language; existing files are preserved")
     language.add_argument("--language-file", help="Reviewed translation in the same JSON assignment format as the templates")
     args = parser.parse_args()
-    if args.rules_only and (args.language or args.language_file):
-        parser.error("--rules-only cannot be combined with --language or --language-file")
     started = time.perf_counter()
     report = {"status": "error", "browser": "not_opened"}
     try:
