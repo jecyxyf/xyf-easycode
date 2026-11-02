@@ -14,21 +14,23 @@ It helps users organize requirements into clear modules, interfaces, and interac
 
 Run [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to install the architecture webpage and shared rules in your project.
 
-After installation, open `docs/xyf-easycode/html/index.html` to view the architecture.
+### 2. Discuss requirements and define the software architecture
 
-### 2. Discuss requirements and define the architecture
-
-Use [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) to discuss requirements, then generate or update the software architecture after agreement.
+Use [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) to discuss requirements, then generate an initial software architecture once the requirements are agreed.
 
 The architecture is JSON data stored in `docs/xyf-easycode/html/software_architecture.js`.
 
-### 3. Review and create a work plan
+### 3. Refine the software architecture
+
+Open `docs/xyf-easycode/html/index.html` and edit the modules on the webpage to correct and improve the software architecture until it matches your needs. Save your changes when you are satisfied.
+
+### 4. Review and create a work plan
 
 Use [xyf-easycode-check](skills/xyf-easycode-check/SKILL.md) to compare the existing code with the software architecture, identify differences, and create a work plan.
 
 Review reports are saved in `docs/xyf-easycode/reports/`. Confirm the work plan before starting development.
 
-### 4. Implement and review the code
+### 5. Implement and review the code
 
 Use [xyf-easycode-code](skills/xyf-easycode-code/SKILL.md) to implement the software according to the architecture and confirmed work plan.
 
