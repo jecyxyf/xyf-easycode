@@ -1,67 +1,35 @@
 # XYF EasyCode
 
-[简体中文](README.zh-CN.md)
+[简体中文](README_CN.md)
 
-**Make VibeCoding easier to guide. Keep the code aligned with the user's requirements.**
+## Project description
 
-XYF EasyCode makes software architecture and interfaces visible and editable, then uses the agreed architecture to guide implementation, testing, and review. Inspect modules, dependencies, method inputs and outputs, events, and expected behavior before the agent writes code.
+XYF EasyCode is a set of skills for AI-assisted coding, with a visual software architecture editor.
 
-The repository contains six Agent Skills and a standalone architecture editor. Skills are stored side by side under `skills/`. Support depends on the agent's skill discovery, file access, tools, and delegation capabilities; reading `SKILL.md` alone does not guarantee every workflow will run.
+It helps users organize requirements into clear modules, interfaces, and interactions. AI then follows the agreed architecture to develop, test, and review code, reducing missed features and departures from the design.
 
-## Install
+## Usage
 
-Open your target project and ask your agent:
+### 1. Install
 
-> Install EasyCode from https://github.com/jecyxyf/xyf-easycode into this project. Use the skill directory supported by your agent, keep all folders under `skills/` as siblings with their complete contents, and preserve existing local changes.
+Run [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to install the architecture webpage and shared rules in your project.
 
-## Use EasyCode
+After installation, open `docs/xyf-easycode/html/index.html` to view the architecture.
 
-> Use xyf-easycode to clarify my requirements, show me the software architecture and interfaces, and implement the agreed design.
+### 2. Discuss requirements and define the architecture
 
-| Stage | What happens |
-| --- | --- |
-| Agree on requirements | Establish the goal, scope, constraints, and expected behavior. |
-| Visualize architecture | Maintain the architecture and open its editable local webpage. |
-| Check the documents | Compare actual code with the agreed architecture and report evidence. |
-| Implement the agreement | Build in dependency order and test documented behavior. |
-| Review changes | Find regressions, fix authorized issues, and report actual verification. |
+Use [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) to discuss requirements, then generate or update the software architecture after agreement.
 
-You can request one stage. Valid confirmed decisions and checks are reused. Implementation must not silently simplify the design or rewrite architecture to hide a mismatch. Workflows requiring independent agents need that capability; unavailable stages must be reported rather than claimed as complete.
+The architecture is JSON data stored in `docs/xyf-easycode/html/software_architecture.js`.
 
-[xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) clarifies user requirements, proposes module and interface improvements, and updates the architecture after agreement.
+### 3. Review and create a work plan
 
-## Architecture editor
+Use [xyf-easycode-check](skills/xyf-easycode-check/SKILL.md) to compare the existing code with the software architecture, identify differences, and create a work plan.
 
-Double-click [index.html](skills/xyf-easycode-install/html/index.html) to use the bundled editor. For a project, use [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to copy the **contents** of `skills/xyf-easycode-install/html/` into `docs/xyf-easycode/html/`. Existing deployments receive only missing files, preserving project data, language settings, and customizations. Open `docs/xyf-easycode/html/index.html` after deployment; the default language is Chinese.
+Review reports are saved in `docs/xyf-easycode/reports/`. Confirm the work plan before starting development.
 
-| File or directory | Purpose |
-| --- | --- |
-| `index.html` | Webpage entry; loads the language and architecture files. |
-| `software_architecture.js` | Project data: `globalThis.softwareArchitecture = <valid JSON>;`. |
-| `language.js` | Active interface language, Chinese by default. |
-| `assert/language_zh.js` / `assert/language_eng.js` | Chinese and English language configurations. |
-| `assert/` | Editor components and styles. |
-| `module/` | Canvas, module, and layer templates. |
+### 4. Implement and review the code
 
-Copy `assert/language_eng.js` over `language.js` and refresh to use English. For another language, translate the configuration's text while preserving message keys and placeholders. Existing architecture data is translated only when requested.
+Use [xyf-easycode-code](skills/xyf-easycode-code/SKILL.md) to implement the software according to the architecture and confirmed work plan.
 
-Save / Ctrl+S writes to the selected data file when the browser supports and grants file access. Otherwise, download a JS copy, replace `software_architecture.js`, and refresh. Saving checks for external changes and preserves unsaved edits on conflict. An HTML snapshot shares the current view without saving the original configuration. The optional name translation button uses an online service; ordinary editing and saving work offline.
-
-See the [editor documentation](skills/xyf-easycode-install/html/README.md) for details.
-
-## Repository layout
-
-```text
-skills/
-├── xyf-easycode/               Main entry
-├── xyf-easycode-install/       html/ and webpage deployment to docs/xyf-easycode/html/
-├── xyf-easycode-requirements/  Requirements discussion and architecture updates
-├── xyf-easycode-check/         Architecture and code comparison
-├── xyf-easycode-code/          Implementation workflow
-└── review-agent/              Code review
-AGENTS.md                 Repository collaboration rules
-README.md                 English documentation
-README.zh-CN.md           Chinese documentation
-```
-
-When changing skills, check names, local links, and shared resources. When changing the editor, open it directly in a browser and verify the affected behavior. Report only checks actually run and identify unverified capabilities.
+During development, run tests and use [review-agent](skills/review-agent/SKILL.md) to review the code. Fix any issues, rerun tests, and review again; deliver once all checks pass.
