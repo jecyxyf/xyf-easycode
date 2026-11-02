@@ -21,6 +21,12 @@ It helps users organize requirements into clear modules, interfaces, and interac
 
 Run [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to install the architecture webpage and shared rules in your project.
 
+To install the skills and set up the webpage automatically, open your target project in your Agent and paste the prompt below. Your Agent needs internet access and permission to read and write project files, and Python 3 must be installed locally.
+
+```text
+Fetch the repository at https://github.com/jecyxyf/xyf-easycode. First read https://github.com/jecyxyf/xyf-easycode/blob/main/skills/xyf-easycode/SKILL.md and follow its instructions to install all six skills and their bundled files in a project-local skills directory supported by the current Agent. Then follow https://github.com/jecyxyf/xyf-easycode/blob/main/skills/xyf-easycode-install/SKILL.md to automatically install the architecture webpage and shared rules. Use the language of this conversation for a new webpage, preserve existing data and settings, and check the installation before reporting the webpage entry path.
+```
+
 ### 2. Analyze existing code, discuss requirements, and define the software architecture
 
 If the project already has code, first analyze its modules, interfaces, and interactions to understand the current software architecture.

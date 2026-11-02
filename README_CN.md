@@ -21,6 +21,12 @@ XYF EasyCode 是一套辅助 AI 编程的技能工具，配有可视化的软件
 
 运行 [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md)，在项目中安装架构网页和公共规则。
 
+在 Agent 中打开目标项目，发送下面的提示词，即可让 Agent 自动安装技能和架构网页。Agent 需要能联网、读写项目文件，本机需要安装 Python 3。
+
+```text
+请获取 https://github.com/jecyxyf/xyf-easycode 仓库，先阅读 https://github.com/jecyxyf/xyf-easycode/blob/main/skills/xyf-easycode/SKILL.md，按说明将全部六个技能及配套文件安装到当前 Agent 支持的项目技能目录；再按照 https://github.com/jecyxyf/xyf-easycode/blob/main/skills/xyf-easycode-install/SKILL.md，自动安装架构网页和公共规则。新装网页的语言跟随当前对话，保留已有数据和设置，最后检查安装结果并给出网页入口。
+```
+
 ### 2. 分析现有代码，讨论需求，定义软件框架
 
 项目已有代码时，先分析代码中的模块、接口和协作关系，梳理当前软件架构。
