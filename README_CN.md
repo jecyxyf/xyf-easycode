@@ -14,9 +14,11 @@ XYF EasyCode 是一套辅助 AI 编程的技能工具，配有可视化的软件
 
 运行 [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md)，在项目中安装架构网页和公共规则。
 
-### 2. 讨论需求，定义软件框架
+### 2. 分析现有代码，讨论需求，定义软件框架
 
-调用 [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md)，讨论需求，确认后生成初步的软件架构。
+项目已有代码时，先分析代码中的模块、接口和协作关系，梳理当前软件架构。
+
+调用 [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md)，讨论需求，确认后生成或更新软件架构。
 
 架构为 JSON 数据，保存在 `docs/xyf-easycode/html/software_architecture.js`。
 

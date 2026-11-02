@@ -14,9 +14,11 @@ It helps users organize requirements into clear modules, interfaces, and interac
 
 Run [xyf-easycode-install](skills/xyf-easycode-install/SKILL.md) to install the architecture webpage and shared rules in your project.
 
-### 2. Discuss requirements and define the software architecture
+### 2. Analyze existing code, discuss requirements, and define the software architecture
 
-Use [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) to discuss requirements, then generate an initial software architecture once the requirements are agreed.
+If the project already has code, first analyze its modules, interfaces, and interactions to understand the current software architecture.
+
+Use [xyf-easycode-requirements](skills/xyf-easycode-requirements/SKILL.md) to discuss requirements, then generate or update the software architecture once the requirements are agreed.
 
 The architecture is JSON data stored in `docs/xyf-easycode/html/software_architecture.js`.
 
