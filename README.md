@@ -2,6 +2,13 @@
 
 [简体中文](README_CN.md)
 
+> [!TIP]
+> As AI advances, Vibe Coding is the way things are heading. I often find it frustrating when AI keeps expanding the scope and struggles to stay focused, so I created this set of skills.
+>
+> Everyone has different coding habits. A development workflow that feels right to me may not work for everyone. If it helps even a small group of people, I'll be very happy.
+>
+> Suggestions are welcome.
+
 ## Project description
 
 XYF EasyCode is a set of skills for AI-assisted coding, with a visual software architecture editor.
