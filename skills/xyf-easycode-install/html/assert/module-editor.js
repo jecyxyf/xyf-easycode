@@ -18,8 +18,11 @@ globalThis.EasyCode.register("module-editor",function (root) {
     if (session.module.id !== session.id) throw new Error(t('moduleEditor.error.immutableId'));
     if (session.existing && (!current || JSON.stringify(current) !== session.snapshot)) throw new Error(t('moduleEditor.error.moduleChanged'));
     if (!session.existing && current) throw new Error(t('moduleEditor.error.duplicateId'));
+    if (session.existing && !hasChanges(session)) return false;
     const trial = structuredClone(project), module = structuredClone(session.module);
-    if (module.codeLocation !== undefined) module.codeLocation = EC.Model.normalizeCodeLocation(module.codeLocation);
+    if (module.codeLocation !== undefined && (!session.existing || module.codeLocation !== current.codeLocation)) {
+      module.codeLocation = EC.Model.normalizeCodeLocation(module.codeLocation);
+    }
     if (session.existing) trial.modules[trial.modules.findIndex(item => item.id === session.id)] = module;
     else trial.modules.push(module);
     // Keep legacy expansion data, removing only references to deleted interfaces.

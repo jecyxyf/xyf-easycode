@@ -8,7 +8,6 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import sys
 import tempfile
 import time
@@ -18,6 +17,7 @@ from urllib.request import url2pathname
 
 SOURCE_REQUIRED = {
     "index.html": "file",
+    "start.py": "file",
     "software_architecture.js": "file",
     "language.js": "file",
     "assert": "directory",
@@ -244,10 +244,19 @@ def install(args, report):
     install_editor(args, report)
     source = Path(__file__).resolve().parent.parent / RULES_NAME
     destination = Path(report["workspace"]) / RULES_NAME
-    if kind(destination) not in ("missing", "file"):
+    state = kind(destination)
+    if state not in ("missing", "file"):
         raise ValueError("File conflict (preserved): " + str(destination))
-    shutil.copyfile(source, destination)
     report["rules_path"] = str(destination)
+    # Keep the project's own rules; only copy the template when the file is missing.
+    if state == "file":
+        report["rules"] = "preserved"
+        return
+    data = source.read_bytes()
+    publish_missing_file(destination, data)
+    if destination.read_bytes() != data:
+        raise ValueError("Copied file verification failed: " + str(destination))
+    report["rules"] = "copied"
 
 
 def main():

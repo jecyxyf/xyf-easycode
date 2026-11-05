@@ -21,12 +21,12 @@ globalThis.EasyCode.register("project-storage",function (root) {
     root.document.body.append(link);
     try {link.click();} finally {link.remove(); root.setTimeout(() => root.URL.revokeObjectURL(url),30000);}
   }
-  function createController({initialProject = null,getProject,replaceProject,validate,pickExisting,pickNew,
-    canWrite = typeof pickExisting === 'function' && typeof pickNew === 'function',
+  function createController({initialProject = null,initialHandle = null,initialBaseline = null,getProject,replaceProject,validate,pickExisting,pickNew,
+    canWrite = Boolean(initialHandle) || (typeof pickExisting === 'function' && typeof pickNew === 'function'),
     pickImport = chooseImportFile,download = downloadFile,confirmOverwrite = () => false,
     prepareSave = () => {},onSaved = () => {},isBusy = () => false,confirmImport = () => false,
     confirmReload = () => false,onState = () => {},onExternal = () => {}}) {
-    let handle = null, baseline = null, sourceName = initialProject === null ? '' : defaultName;
+    let handle = initialHandle, baseline = initialHandle ? initialBaseline : null, sourceName = initialHandle?.name || (initialProject === null ? '' : defaultName);
     let loaded = initialProject !== null, editVersion = 0, savedVersion = 0, unconfirmed = false;
     let initialData = initialProject === null ? null : JSON.stringify(initialProject);
     let inFlight = null, checking = false, timer, stopped = false;
@@ -105,7 +105,7 @@ globalThis.EasyCode.register("project-storage",function (root) {
       });
     }
     function save(asNew = false) {
-      if (!canWrite) return exportCopy();
+      if (!canWrite || (asNew && typeof pickNew !== 'function') || (!asNew && !handle && typeof pickExisting !== 'function')) return exportCopy();
       return operation(async () => {
         const {snapshot,content,version:snapshotVersion} = makeSnapshot();
         const selection = asNew ? pickNew(defaultName,handle) : handle || pickExisting();
@@ -178,7 +178,7 @@ globalThis.EasyCode.register("project-storage",function (root) {
       await refresh();
       if (!stopped) timer = root.setTimeout(poll,2000);
     }
-    state(loaded ? 'loaded' : 'idle',loaded ? t('projectStorage.automaticallyLoaded') : t('projectStorage.loadPrompt'));
+    state(loaded ? 'loaded' : 'idle',loaded ? (handle ? t('projectStorage.opened') : t('projectStorage.automaticallyLoaded')) : t('projectStorage.loadPrompt'));
     return {
       importFile:open,save:() => save(),saveAs:() => save(true),download:exportCopy,reload:() => refresh(true),refresh,
       startSync() {stopped = false; root.clearTimeout(timer); timer = root.setTimeout(poll,2000);},

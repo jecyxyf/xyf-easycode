@@ -10,13 +10,51 @@ globalThis.EasyCode.register("app",function (root) {
     root.addEventListener('unhandledrejection',event => {event.preventDefault(); showError(event.reason);});
     try {
       EC.Icons.hydrate(document);
-      let initial = null, loadError = '';
-      try {
-        const snapshot = get('ec-project');
-        const source = snapshot ? JSON.parse(snapshot.textContent) : root.softwareArchitecture;
-        if (source === undefined) throw new Error(t("app.cannot.load.software.architecture.js.keep.it"));
-        initial = structuredClone(EC.ProjectFile.validate(source));
-      } catch (error) {loadError = error.message;}
+      let initial = null, loadError = '', initialHandle = null, initialBaseline = null;
+      const snapshot = get('ec-project');
+      if (!snapshot && /^https?:$/i.test(root.location?.protocol || '') && typeof root.fetch === 'function') {
+        try {
+          const response = await root.fetch('__easycode__/project',{cache:'no-store',credentials:'same-origin',headers:{'x-easycode-project':'1'}});
+          if (response.ok && response.headers.get('x-easycode-project') === '1') {
+            initialBaseline = await response.text();
+            initial = structuredClone(EC.ProjectFile.parse(initialBaseline));
+            initialHandle = {
+              name:EC.ProjectFile.fileName,
+              async getFile() {
+                const res = await root.fetch('__easycode__/project',{cache:'no-store',credentials:'same-origin',headers:{'x-easycode-project':'1'}});
+                if (!res.ok) throw new Error(t('projectStorage.cannotWrite'));
+                const body = await res.text();
+                return {name:EC.ProjectFile.fileName,text:async () => body};
+              },
+              async createWritable() {
+                let buffer = '';
+                return {
+                  async write(chunk) {buffer += String(chunk ?? '');},
+                  async close() {
+                    const res = await root.fetch('__easycode__/project',{
+                      method:'PUT',
+                      headers:{'content-type':'text/javascript;charset=utf-8','x-easycode-project':'1'},
+                      body:buffer,
+                      credentials:'same-origin'
+                    });
+                    if (!res.ok) throw new Error((await res.text()) || t('projectStorage.cannotWrite'));
+                  },
+                  async abort() {buffer = '';}
+                };
+              }
+            };
+          }
+        } catch (error) {
+          if (initialBaseline !== null) loadError = error.message;
+        }
+      }
+      if (initial === null && !loadError) {
+        try {
+          const source = snapshot ? JSON.parse(snapshot.textContent) : root.softwareArchitecture;
+          if (source === undefined) throw new Error(t("app.cannot.load.software.architecture.js.keep.it"));
+          initial = structuredClone(EC.ProjectFile.validate(source));
+        } catch (error) {loadError = error.message;}
+      }
       let projectOpened = initial !== null;
       let project = initial || EC.Model.createProject();
       let canvas, nodes, dialogs, storage;
@@ -64,15 +102,18 @@ globalThis.EasyCode.register("app",function (root) {
       labelAction('save',t("app.save.configuration.ctrl.s"),t("app.save.configuration"));
       labelAction('export',t("app.download.js.copy.ctrl.shift.s"),t("app.download.js.copy"));
       get('ec-export-html').hidden = false;
+      const isNativeHandle = value => typeof root.FileSystemHandle === 'function' && value instanceof root.FileSystemHandle;
       storage = EC.ProjectStorage.createController({
         initialProject:initial,
+        initialHandle,
+        initialBaseline,
         getProject:() => project,
         validate:EC.Model.validate,
         isBusy:() => get('ec-dialog').open || EC.Dialogs.isConfirming() || !!canvas?.hasDraftChanges(),
         prepareSave:EC.Model.fillProjectDefaults,
         onSaved() {if (EC.Model.fillProjectDefaults(project)) {nodes?.render(); canvas?.refresh(); refreshHeader();}},
-        pickExisting:nativeFiles ? startIn => root.showOpenFilePicker({id:pickerId,types:fileTypes,multiple:false,...(startIn ? {startIn} : {})}).then(handles => handles[0]) : undefined,
-        pickNew:nativeFiles ? (suggestedName,startIn) => root.showSaveFilePicker({id:pickerId,types:fileTypes,suggestedName,...(startIn ? {startIn} : {})}) : undefined,
+        pickExisting:nativeFiles ? startIn => root.showOpenFilePicker({id:pickerId,types:fileTypes,multiple:false,...(isNativeHandle(startIn) ? {startIn} : {})}).then(handles => handles[0]) : undefined,
+        pickNew:nativeFiles ? (suggestedName,startIn) => root.showSaveFilePicker({id:pickerId,types:fileTypes,suggestedName,...(isNativeHandle(startIn) ? {startIn} : {})}) : undefined,
         pickImport,download,
         confirmOverwrite:({fileName}) => EC.Dialogs.confirm(t("app.replace.the.contents.of.filename",{fileName}),{title:t("app.replace.file"),confirmLabel:t("app.replace"),danger:true}),
         confirmImport:() => EC.Dialogs.confirm(t("app.there.are.unsaved.changes.loading.another.file"),{title:t("app.load.configuration"),confirmLabel:t("app.continue"),danger:false}),

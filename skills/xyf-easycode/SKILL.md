@@ -1,32 +1,34 @@
 ---
 name: xyf-easycode
-description: 按用户目标选择并衔接 EasyCode 的需求设计、网页安装、内容审查、代码开发和缺陷审查技能。
+description: Selects and chains EasyCode skills (requirements design, web installation, content review, code development, and defect review) according to the user's goals.
 metadata:
   version: "0.0.1"
 ---
 
-# XYF EasyCode 主技能
+# XYF EasyCode Main Skill
 
-本技能负责确定任务归属、检查前提和衔接技能，具体执行由对应技能决定。结合用户要求和已有上下文确定目标项目及范围，只问缺少的关键信息；完成当前范围后交付，已有明确后续任务和授权时继续。
+This skill determines task ownership, checks prerequisites, and chains skills; concrete execution is decided by the corresponding skill. Determine the target project and scope from the user's request and the existing context, asking only for missing key information; deliver once the current scope is complete, and continue only when explicit follow-up tasks and authorization exist.
 
-确定项目后，运行前及每批写入前重读 `<project>/docs/xyf-easycode/PromptsRules.md`；未部署先读[模板](../xyf-easycode-install/PromptsRules.md)并说明缺项，复制交给 install 按授权处理。读取失败则暂停。
+**Rule**: After the project is determined, re-read `<project>/docs/xyf-easycode/PromptsRules.md` before starting and before every batch of writes; if it is missing, first read the [template](../xyf-easycode-install/PromptsRules.md) and explain, then hand over to [install](../xyf-easycode-install/SKILL.md) to fill it in per authorization; if reading fails, pause.
 
-安装时，将本目录和下表中的五个技能目录一起放入当前 Agent 支持的技能目录，保持同一父目录，并保留各目录内的全部文件。不要覆盖已有的用户修改。
+When installing, place this directory together with the six skill directories listed below into the skill directory supported by the current Agent, keeping the same parent directory and keeping every file inside each directory. Do not overwrite existing user modifications.
 
-## 技能路由
+## Skill Routing
 
-按用户要的结果选择技能，只读取选中技能的 `SKILL.md` 及当前所需资源。调用前确认目标技能及必要依赖存在；缺失时报告具体缺项，暂停受影响任务，不得假称已加载或可用。下列链接均相对本文件所在目录。
+Choose the skill by the result the user wants, and read only the selected skill's `SKILL.md` and the resources currently needed. Before invoking, confirm the target skill and its required dependencies exist; if anything is missing, report the specific missing items and pause the affected tasks — never claim something is loaded or available when it is not. All links below are relative to this file's directory.
 
-| 任务 | 技能 |
+| Task | Skill |
 | --- | --- |
-| 与用户沟通需求，生成或更新软件架构文件 | [xyf-easycode-requirements](../xyf-easycode-requirements/SKILL.md) |
-| 部署架构网页或补齐 PromptsRules.md，默认在 docs/xyf-easycode/ | [xyf-easycode-install](../xyf-easycode-install/SKILL.md) |
-| 对照软件架构文件和现有代码，找出差异并给出开发方案 | [xyf-easycode-check](../xyf-easycode-check/SKILL.md) |
-| 按软件架构和确认的开发方案编码，完成功能 | [xyf-easycode-code](../xyf-easycode-code/SKILL.md) |
-| 只读审查指定代码改动引入的新缺陷 | [review-agent](../review-agent/SKILL.md) |
+| Discuss requirements; generate or update the software architecture file | [xyf-easycode-requirements](../xyf-easycode-requirements/SKILL.md) |
+| Deploy the architecture web page or fill in PromptsRules.md | [xyf-easycode-install](../xyf-easycode-install/SKILL.md) |
+| Compare architecture and code for differences; produce a development plan | [xyf-easycode-check](../xyf-easycode-check/SKILL.md) |
+| Code per the architecture and the confirmed plan to complete features | [xyf-easycode-code](../xyf-easycode-code/SKILL.md) |
+| After code changes, sync the architecture JSON to the actual code | [xyf-easycode-sync](../xyf-easycode-sync/SKILL.md) |
+| Read-only review of new defects introduced by specified code changes | [review-agent](../review-agent/SKILL.md) |
 
-## 工作流程
+## Workflow
 
-1. **需求沟通与架构设计**：调用 requirements，与用户沟通需求，讨论确认后生成或更新软件架构文件。
-2. **差异审查与方案**：调用 check，对照软件架构文件和现有代码，找出差异，给出具体开发方案，交用户确认。
-3. **代码开发与交付**：调用 code，按软件架构和确认的开发方案实现功能，完成测试、审查、修复和交付。review-agent 用于此阶段的代码缺陷审查。
+0. **Install the web page**: If the project does not yet have `docs/xyf-easycode/html/` or `PromptsRules.md`, first call install to fill them in per authorization.
+1. **Requirements discussion and architecture design**: Call requirements, discuss the requirements, and after confirmation generate or update the architecture file.
+2. **Difference review and plan**: Call check, compare the architecture with the code to find differences, produce a development plan, and hand it to the user for confirmation.
+3. **Code development and delivery**: Call code to implement, test, review, fix, and deliver per the architecture and the plan; before delivery, use sync to align the architecture with the actual code. review-agent reviews this phase's code for defects.

@@ -1,59 +1,46 @@
 ---
 name: review-agent
-description: Perform a read-only, defect-first review of a specified code change and return every actionable finding. Use when another agent delegates review of uncommitted changes, a base-branch diff, a commit, or custom review instructions.
+description: Read-only review of specified code changes (uncommitted modifications, a diff against a base branch, a specific commit, or custom requirements), finding all defects introduced by the changes that the author would fix. Use when another agent delegates the review of code changes.
 ---
 
-# Review Agent
+# Defect Review
 
-确定项目后，运行前及每批写入前重读 `<project>/docs/xyf-easycode/PromptsRules.md`；未部署先读[模板](../xyf-easycode-install/PromptsRules.md)并说明缺项，复制交给 install 按授权处理。读取失败则暂停。
+**Rule**: After the project is determined, re-read `<project>/docs/xyf-easycode/PromptsRules.md` before starting; if it is missing, first read the [template](../xyf-easycode-install/PromptsRules.md) and explain, then hand over to [install](../xyf-easycode-install/SKILL.md) to fill it in per authorization; if reading fails, pause.
 
-Inspect the requested target directly and return every finding that the author would likely fix.
-Do not modify files, create commits, push branches, post review comments, or delegate the review
-to another agent.
+Inspect the specified changes directly and list every problem the author would most likely fix. Do not modify files, commit, push, or post comments, and do not forward the review to other agents.
 
-## Review the change
+## How to Review
 
-1. Read the applicable `AGENTS.md` instructions.
-2. Inspect the complete diff for the requested target and enough surrounding code to understand
-   each changed path.
-3. Identify concrete regressions introduced by the change. Continue through the whole diff after
-   finding the first issue.
-4. Check the relevant tests and call sites to confirm that each finding is real and actionable.
+1. Read the applicable `AGENTS.md`.
+2. Look at the complete diff, and read enough context to understand every changed path.
+3. Find the problems genuinely introduced by the changes; after finding the first one, keep reading the entire diff.
+4. Check the related tests and call sites to confirm each problem is real and fixable.
 
-For a base-branch review, compare the changes that would actually merge rather than diffing
-directly against the branch tip. Resolve the comparison ref to the branch's upstream when that
-upstream exists and is ahead of the local branch; otherwise use the local branch. Run
-`git merge-base HEAD <comparison-ref>`, then inspect `git diff <merge-base-sha>`. If the local
-branch cannot be resolved, try its configured upstream explicitly before reporting that the target
-is unavailable.
+When reviewing against a base branch, look at what will actually be merged instead of comparing directly with the branch's latest commit. If the branch's upstream exists and is newer than the local one, use the upstream; otherwise use the local branch; run `git merge-base HEAD <compare-branch>` and then look at `git diff <merge-base>`. If the local branch cannot be found, first try its configured upstream, then report the target as unavailable.
 
-Flag an issue only when all of these are true:
+Something counts as a problem only if ALL of the following hold:
 
-- It affects correctness, security, performance, or maintainability in a meaningful way.
-- It is discrete and actionable.
-- It was introduced by the reviewed change.
-- The affected scenario or call path can be demonstrated from the code.
-- The author would probably fix it if they knew about it.
+- It clearly affects correctness, security, performance, or maintainability.
+- It is specific and independently fixable.
+- It was introduced by these changes.
+- The affected scenario or call path can be pointed out from the code.
+- The author would most likely fix it once they know.
 
-Do not flag speculative concerns, pre-existing problems, intentional behavior changes, or style
-nits that do not obscure the code.
+Do not report speculation, problems that predate the changes, intentional behavior changes, or minor style flaws that do not affect reading.
 
-## Write the result
+## How to Write the Results
 
-Present findings first, ordered by severity. Use one entry per issue in this form:
+List the problems first, ordered by severity, one per line:
 
-`[P1] Imperative finding title — path/to/file.rs:line`
+`[P1] Problem title written in the imperative — path/file:line`
 
-Follow the title with one short paragraph explaining the affected scenario and why the behavior is
-wrong. Keep the cited range as small as possible and make sure it overlaps the reviewed diff.
+After the title, add one short paragraph explaining the affected scenario and what is wrong. Keep quoted ranges as small as possible, and keep them inside the diff under review.
 
-Use these priorities:
+| Level | Meaning |
+|---|---|
+| `P0` | Severe fault that must block the release |
+| `P1` | Urgent; should be fixed next |
+| `P2` | Ordinary defect; should be fixed |
+| `P3` | Minor impact, but worth fixing |
 
-- `P0`: universal release blocker or critical failure.
-- `P1`: urgent defect that should be fixed next.
-- `P2`: ordinary defect that should be fixed.
-- `P3`: low-impact issue that is still worth fixing.
-
-If there are no qualifying findings, say `No findings.` Do not invent a finding to fill the result.
-After the findings, add a brief overall assessment and mention any material test gaps or residual
-risks.
+If no problem qualifies, write "No issues found." — never invent problems to fill the list. Finish with a brief overall assessment, noting any important test gaps or remaining risks.

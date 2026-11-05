@@ -1,52 +1,52 @@
 ---
 name: xyf-easycode-code
-description: 主代理组织子代理开发、测试、审查和交付。
+description: The main agent organizes subagents to develop, test, review, and deliver.
 ---
 
-# 代码开发
+# Code Development
 
-- **执行依据**：优先本次报告，否则从 `docs/xyf-easycode/reports/` 按审查 ID 取范围匹配的最新报告。架构用已确认路径，默认 `docs/xyf-easycode/html/software_architecture.js`；用 [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) 读取，不执行配置。
-- **定位**：按 `repository.path`、逐行 `codeLocation` 定位，复用代码、保留用户修改，仅改确认范围；文档、测试路径相对项目，技能链接相对本目录。
-- **规则**：开始及每批写入前重读 `docs/xyf-easycode/PromptsRules.md`；缺失读[模板](../xyf-easycode-install/PromptsRules.md)并说明，由 [install](../xyf-easycode-install/SKILL.md) 按授权补齐；读取失败暂停。
+- **Execution basis**: Prefer the current review report; otherwise take the latest scope-matching `*_check.md` in `docs/xyf-easycode/reports/`. For old reports without the suffix, count only those titled as reviews — not requirement changes or delivery records. The architecture defaults to `docs/xyf-easycode/html/software_architecture.js`, read with [ProjectFile.parse](../xyf-easycode-install/html/assert/project-file.js) without executing the configuration.
+- **Locating**: Locate via `repository.path` and `codeLocation`, reuse existing code, keep user modifications, and change only the confirmed scope; documents and test paths are relative to the project, skill links relative to this directory.
+- **Rule**: After the project is determined, re-read `<project>/docs/xyf-easycode/PromptsRules.md` before starting and before every batch of writes; if it is missing, first read the [template](../xyf-easycode-install/PromptsRules.md) and explain, then hand over to [install](../xyf-easycode-install/SKILL.md) to fill it in per authorization; if reading fails, pause.
 
-## 如何组织开发
+## How to Organize Development
 
-### 1. 主代理安排任务
+### 1. The Main Agent Assigns Tasks
 
-依据报告列清模块及成员 ID、文件、负责人、依赖、验收及源码、测试、审查报告写入范围。沿用有效授权，未授权等用户单独回复“执行”，扩大范围重新确认。
-记录报告和架构路径、源码版本、未提交修改及进度，每批及交接前更新。独立模块并行，同文件串行；前置模块通过测试和主代理审查、review 后再做依赖模块。
+Per the report, list module and member IDs, files, owners, dependencies, acceptance criteria, and write scopes. Reuse a valid authorization; otherwise wait for the user to separately reply “执行”; re-confirm when expanding the scope.
+Record the report, architecture path, source version, uncommitted changes, and progress, updating every batch. Independent modules run in parallel; work on the same file runs in series; dependent modules start only after their prerequisite modules pass check and review.
 
-### 2. 写代码和测试
+### 2. Write Code and Tests
 
-子代理只改分配范围，编码、测试、自查通过后停写，回传改动、实际测试结果、自查结论及遗留问题。
+Subagents change only their assigned scope, stop writing once coding, testing, and self-check pass, and report back the changes, actual test results, self-check conclusions, and remaining issues.
 
-- **按类实现**：沿用项目语言、C++ 类风格：一节点一类，文件可多类，接口为成员方法；封装状态、行为，按需构造、释放、控制访问；对象协作，不以全局函数、共享数据代替业务类。`public` 按架构；`private`、`protected` 成员、内部流程自定并实现，不写入架构。
-- **高密度注释**：类、方法、参数、返回值及独立逻辑段均注释，说明用途、条件、数据变化、异常处理、模块协作；每5行代码内必须至少有1行注释，随实现更新。
-- **注释语言**：以架构网页同目录 `language.js` 的 `locale/name` 为准，标题、正文用该语言，标识符保留原样；无法确认先核实。
-- **按流程编码**：遵守架构名称、类型、默认值和行为，不写空壳或假结果；逐个按 `interfaces[].flow`、`errors` 的顺序、条件和错误约定编码，每步先写与架构网页语言一致、含义准确的长注释，再写实现；方法从 1 编号，事件同样处理：
+- **Implement by class**: Use the project's existing language and write object-oriented code: one class per node, multiple classes per file allowed, interfaces as member methods; state and behavior are encapsulated in classes — do not replace business classes with global functions or shared data. `public` follows the architecture; `private` and `protected` members and internal flows are up to you and are not written into the architecture.
+- **High-density comments**: Comment classes, methods, parameters, return values, and standalone logic segments, explaining purpose, conditions, data changes, exceptions, and collaboration; at least 1 comment line per 5 lines of code, updated along with the implementation.
+- **Comment language**: Follow `locale/name` in the `language.js` sitting in the architecture web page's directory; keep identifiers as they are; verify first when it cannot be confirmed.
+- **Code by flow**: Obey the architecture's names, types, default values, and behavior; no empty shells or fake results; code per the order and conditions of `interfaces[].flow` and `errors`, writing an accurate long comment before implementing each step, numbering steps from 1 within a method; events likewise:
 
 ```text
-/************************ 流程 1：步骤说明 ************************/
+/************************ Flow 1: step description ************************/
 ```
 
-按网页语言改写示例，用编程语言的注释语法。子代理按 `tests.steps/expected` 运行测试并自查，失败修复重测；受阻报位置和原因，不猜测或改架构。
+Adapt the example to the web page language and the programming language's comment syntax. Subagents test and self-check per `tests.steps/expected`, fixing and retesting on failure; when blocked, report the location and the cause — no guessing, no architecture changes.
 
-### 3. 主代理逐模块审查和 review
+### 3. The Main Agent Checks and Reviews Each Module
 
-主代理使用 [check](../xyf-easycode-check/SKILL.md) 对照架构检查，再按 [review-agent](../review-agent/SKILL.md) 审查完整改动及相关调用；不只接收子代理结论，不代写或修复模块。问题交子代理修复、重测、自查，主代理重新审查和 review，通过才结束模块。
+The main agent runs [check](../xyf-easycode-check/SKILL.md) against the architecture, then reviews the complete changes and their call sites per [review-agent](../review-agent/SKILL.md); do not trust subagent conclusions alone, and do not write or fix code in their place. Issues go back to the subagents to fix and retest, then get reviewed again; a module closes only after passing.
 
-### 4. 主代理整体审查和 review
+### 4. The Main Agent Reviews the Whole and Syncs
 
-全部模块通过并停写后，主代理对本次全部改动、接口、数据流和调用做整体 check/review，不只看最后一批修复，组织子代理联调、回归和必要构建。问题交回修复、重测，再做受影响审查和整体 check/review。
+After all modules stop writing, run an overall check/review over all changes, interfaces, and data flow; organize integration testing, regression, and the necessary builds; send issues back for fixes and re-review. Once passed, use [sync](../xyf-easycode-sync/SKILL.md) to write the intentional changes back into the architecture.
 
-测试入口、用例、数据、临时文件、缓存、日志、覆盖率、测试报告、工作目录及相关构建、类型检查输出均放在 `docs/xyf-easycode/tests/`；并行分目录，可引用外部源码和复用工具，保留旧测试。
+Tests, data, temporary files, logs, and build and type-check outputs all go into `docs/xyf-easycode/tests/`, in separate subdirectories when running in parallel; keep the old tests.
 
-## 结果如何交付
+## How to Deliver Results
 
-主代理汇总项目、报告和架构路径、执行范围及版本，再列：
+Summarize the project, the report and architecture paths, the scope, and the versions, then list:
 
-| 工作项 | 模块及接口 | 文件 | 测试及构建 | 模块及整体审查 | 结果 |
+| Work item | Module and interface | Files | Tests and build | Review | Result |
 |---|---|---|---|---|---|
-| 报告条目 | 名称及 ID | 实际路径及改动 | 实际命令及结果 | check 报告及 review 结论 | 已完成／未完成及原因 |
+| Report entry | Name and ID | Paths and changes | Commands and results | check report and review conclusions | Completed / Incomplete, with the reason |
 
-任务、必要测试、模块及整体审查和 review 全部通过才报完成；未运行、未通过和阻塞如实列明，继续处理未完成工作。提交、推送、合并或发布须用户明确要求。
+Report completion only when tests, check, review, and sync are all done; list honestly whatever was not run, did not pass, or is blocked. Commit, push, merge, or release only on explicit user request.

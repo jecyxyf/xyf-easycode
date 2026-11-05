@@ -60,8 +60,10 @@ globalThis.EasyCode.register("model",function (root) {
   function fillContentDefaults(item,kind,siblings = []) {
     if (!object(item)) return false;
     let changed = false;
+    const named = (typeof item.name === 'string' && item.name.trim()) || (typeof item.englishName === 'string' && item.englishName.trim());
     const defaults = contentDefaults(kind,siblings.filter(other => other?.id !== item.id));
     for (const [key,value] of Object.entries(defaults)) {
+      if ((key === 'name' || key === 'englishName') && named) continue;
       if (item[key] === undefined || typeof item[key] === 'string' && !item[key].trim()) {item[key] = value; changed = true;}
     }
     return changed;

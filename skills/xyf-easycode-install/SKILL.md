@@ -1,52 +1,52 @@
 ---
 name: xyf-easycode-install
-description: 把软件架构网页装到项目里，补齐缺少的网页文件，保留原有数据和设置；不负责安装技能包或设计项目架构。
+description: Installs the software architecture web page into a project, fills in missing web files, and keeps existing data and settings; does not install the skill package or design the project architecture.
 ---
 
-# 把架构网页装进项目
+# Install the Architecture Web Page into a Project
 
-这个技能负责把软件架构网页装到项目里。网页文件来自本技能的 `html/` 文件夹，放到 `<project>/docs/xyf-easycode/html/`。
+This skill installs the software architecture web page into a project. The web files come from this skill's `html/` folder and go to `<project>/docs/xyf-easycode/html/`.
 
-开始前和每批写入前重读 `<project>/docs/xyf-easycode/PromptsRules.md`；缺失先读本技能[模板](PromptsRules.md)并说明，补齐按授权处理；读取失败暂停。
+**Rule**: After the project is determined, re-read `<project>/docs/xyf-easycode/PromptsRules.md` before starting and before every batch of writes; if it is missing, first read this skill's [template](PromptsRules.md) and explain, then fill it in per authorization; if reading fails, pause.
 
-| 步骤 | 要做什么 |
+| Step | What to do |
 | --- | --- |
-| 1. 先看装好了没有 | 让脚本检查需要的文件和文件夹，只看在不在、类型对不对，不读已有网页文件的内容。网页文件齐全，就跳过网页安装；缺什么才补什么。项目多出来的文件不用管。 |
-| 2. 保留已有网页文件 | 已有的数据、语言和自己改过的内容先留着。新文件夹完整复制，已有文件夹只补缺少的文件。遇到文件和文件夹重名等冲突，就停下说明。需要替换时，先说清楚改哪里，等用户针对该方案单独回复“执行”。 |
-| 3. 确定网页语言 | 选过的语言继续用。中文用 `zh`，英文用 `en`。需要新建语言文件却还没选语言时，先问清楚。其他语言：把文字分成几组，每位助手负责一组，各组不重复；主助手最后统一用词，检查有没有漏翻、重复或空白。 |
-| 4. 运行安装脚本 | 用本技能的 Python 脚本统一检查、复制和核对。先把新文件放到临时位置，核对后再放进项目。已有网页文件和模板不一样，也不能直接覆盖。脚本报错时先处理，再检查。 |
-| 5. 检查有没有装对 | 脚本检查复制内容、网页需要的文件和语言文字。每项都要有译文，同一项不能填两遍；不同位置可以使用相同的文字。像 `{name}` 这类标记要原样保留，语言名称和代号要写对。发现问题先解决，再检查。 |
-| 6. 告诉用户结果 | 给出目标目录和 `index.html` 的完整路径，说清复制了多少、跳过了什么、检查结果和用时。有浏览器能力时可以打开看一下；没打开就直接说明，不能说已经验证网页能正常运行。 |
+| 1. Check whether it is already installed | Let the script check the required files and folders — only whether they exist and are the right type, without reading the contents of existing web files. If the web files are complete, skip the web installation; fill in only what is missing. Extra files in the project are left alone. |
+| 2. Keep existing files | Existing data, language, `PromptsRules.md`, and user-edited content are kept — the script never overwrites them. New folders are copied in full; existing folders get only their missing files added. On conflicts, such as a file and a folder sharing a name, stop and explain. When replacement is needed, first state exactly what would change and wait for the user to separately reply “执行” to that plan. |
+| 3. Determine the web language | Keep a previously chosen language. Use `zh` for Chinese and `en` for English. If a new language file must be created but no language has been chosen yet, ask first. Other languages: split the text into groups, one group per assistant, with no overlap; the main assistant then unifies the wording and checks for missing, duplicated, or blank translations. |
+| 4. Run the install script | Use this skill's Python script to check, copy, and verify everything uniformly. Stage new files in a temporary location first, then move them into the project after verification. Even when an existing web file differs from the template, never overwrite it directly. Handle script errors first, then re-check. |
+| 5. Verify the installation | The script checks the copied contents, the files the web page needs, and the language text. Every item must have a translation, and the same item must not be filled in twice; different locations may share the same text. Placeholders like `{name}` must be kept as-is, and language names and codes must be correct. Fix any problem found first, then re-check. |
+| 6. Tell the user the result | Give the full paths of the target directory, `start.py`, and `index.html`, and state how much was copied, what was skipped, whether the rules file was newly copied or kept, the check results, and the time taken. With browser capability you may open it for a look; if you did not open it, say so directly — never claim the web page was verified to run. |
 
-需要 Python 3，目标磁盘要支持脚本使用的硬链接复制方式。不支持时，报告错误并先处理。
+Python 3 is required, and the target disk must support the hard-link copy method the script uses. When it does not, report the error and handle that first.
 
 ```bash
 python3 "<skill>/scripts/install.py" --project "<project>" --language zh
 ```
 
-- `<skill>` 换成本技能文件夹的完整路径，`<project>` 换成目标项目的完整路径。
-- 英文把 `zh` 换成 `en`。确认沿用现有语言时，才可以省略语言参数。
-- 其他语言先检查译文，再用 `--language-file "<译文文件>"` 指定文件；不要同时传 `--language`。
+- Replace `<skill>` with the full path of this skill's folder, and `<project>` with the full path of the target project.
+- On Windows without `python3`, use `python` or `py -3` instead.
+- For English, replace `zh` with `en`. The language argument may be omitted only when keeping the existing language is confirmed.
+- For other languages, check the translation first, then point to the file with `--language-file "<translation-file>"`; do not pass `--language` at the same time.
 
-装好后的主要文件如下，来源中的其他文件也要完整保留：
+The main files after installation are listed below; the other files in the source must also be kept in full:
 
 ```text
 docs/xyf-easycode/
-├── PromptsRules.md             # 技能运行前读取的公共规则
+├── PromptsRules.md             # Common rules read before skills run
 └── html/
-    ├── index.html             # 双击打开网页
-    ├── software_architecture.js # 项目的架构数据
-    ├── language.js            # 网页的语言和文字
-    ├── assert/                # 网页用到的文件
-    │   ├── language_zh.js     # 中文模板
-    │   └── language_eng.js    # 英文模板
-    ├── module/                # 画布和卡片模板
+    ├── start.py               # Double-click or run to open the web page (popup-free saving)
+    ├── index.html             # Can also be double-clicked to open the web page
+    ├── software_architecture.js # The project's architecture data
+    ├── language.js            # The web page's language and text
+    ├── assert/                # Files used by the web page
+    │   ├── language_zh.js     # Chinese template
+    │   └── language_eng.js    # English template
+    ├── module/                # Canvas and card templates
     └── references/
-        └── architecture-data.jsonc # 给助手看的数据说明
+        └── architecture-data.jsonc # Data reference for assistants
 ```
 
-网页可以直接打开，不用另外搭服务器或运行构建命令。新装的架构数据是空白模板，不代表项目已经有了这些功能，也不要自动搬入旧项目的数据。
+When the web page is opened by running `start.py`, `software_architecture.js` is loaded automatically and written back directly, with no file-picker popups at any point; when opening `index.html` directly by double-click, the first save needs file-picker authorization, or you download a JS copy to replace it. A freshly installed architecture is a blank template — it does not mean the project already has these features; do not automatically migrate old data into it. See the [web page README](html/README.md) for details.
 
-保存时，浏览器能直接写文件的，先让用户选中文件并授权；不能直接保存的，就下载 JS 副本，替换数据文件后刷新。详细方法见[网页说明](html/README.md)。
-
-安装完成就结束本次工作。画架构、写代码等后续工作，另按用户要求处理。
+Once installation is complete, this run ends. Follow-up work such as drawing the architecture or writing code is handled separately per the user's request.
