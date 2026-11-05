@@ -33,11 +33,11 @@ Adapt the example to the web page language and the programming language's commen
 
 ### 3. The Main Agent Checks and Reviews Each Module
 
-The main agent runs [check](../xyf-easycode-check/SKILL.md) against the architecture, then reviews the complete changes and their call sites per [review-agent](../review-agent/SKILL.md); do not trust subagent conclusions alone, and do not write or fix code in their place. Issues go back to the subagents to fix and retest, then get reviewed again; a module closes only after passing.
+The main agent runs [check](../xyf-easycode-check/SKILL.md) against the architecture, then reviews the complete changes and their call sites per [review-agent](../review-agent/SKILL.md); do not trust subagent conclusions alone, and do not write or fix code in their place. Issues go back to the subagents to fix and retest, then get reviewed again; a module closes only when the check has no nonconforming and no unverified items. Nonconforming items fall into two kinds: wrong code goes back to the subagents for fixing; intentional changes (the code is the source of truth, the architecture is to be written back) are recorded item by item for step 4's sync and do not count as defects.
 
 ### 4. The Main Agent Reviews the Whole and Syncs
 
-After all modules stop writing, run an overall check/review over all changes, interfaces, and data flow; organize integration testing, regression, and the necessary builds; send issues back for fixes and re-review. Once passed, use [sync](../xyf-easycode-sync/SKILL.md) to write the intentional changes back into the architecture.
+After all modules stop writing, run an overall check/review over all changes, interfaces, and data flow; organize integration testing, regression, and the necessary builds; send issues back for fixes and re-review. After passing by the same standard, use [sync](../xyf-easycode-sync/SKILL.md) to write the recorded intentional changes back into the architecture; the whole run is not passed until sync completes.
 
 Tests, data, temporary files, logs, and build and type-check outputs all go into `docs/xyf-easycode/tests/`, in separate subdirectories when running in parallel; keep the old tests.
 
@@ -49,4 +49,4 @@ Summarize the project, the report and architecture paths, the scope, and the ver
 |---|---|---|---|---|---|
 | Report entry | Name and ID | Paths and changes | Commands and results | check report and review conclusions | Completed / Incomplete, with the reason |
 
-Report completion only when tests, check, review, and sync are all done; list honestly whatever was not run, did not pass, or is blocked. Commit, push, merge, or release only on explicit user request.
+Report completion only when tests, check, review, and sync are all done and no unresolved nonconforming or unverified items remain; anything that must be left over is listed item by item and explicitly accepted by the user. Whatever was not run, did not pass, or is blocked is likewise listed honestly. Commit, push, merge, or release only on explicit user request.
