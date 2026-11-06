@@ -26,7 +26,7 @@ description: 对照软件架构审查代码及测试内容，输出缺失、不�
 | 方法和接口 | `interfaces` 用途、输入输出；按 `flow` 顺序和条件、`errors` 错误处理逐步核对 |
 | 调用和事件 | 按 `dependencies`、`flow` 核对调用、数据及 `events` 方向、参数；`relations` 仅辅助定位 |
 | 测试内容 | `tests.steps/expected` 落实为正常、边界、出错用例，断言明确；位于 `docs/xyf-easycode/tests/` |
-| 代码注释 | 按 [code 约定](../xyf-easycode-code/SKILL.md#2-write-code-and-tests)：每5行至少1行注释，内容符合实现，语言与架构网页一致 |
+| 代码注释 | 按 [code 约定](../xyf-easycode-code/SKILL.md#2-write-code-and-tests)：每5行至少1行注释，内容符合实现，模板句、复述代码不计入，语言与架构网页一致 |
 
 4. **查找证据**：沿入口、注册、调用和数据传递找到实现，记录路径和行号。找不到列为缺失；不凭名称、注释、图上状态或测试通过判符合。
 5. **查全再结论**：补查遗漏和受影响部分；查不清列未核实，需改架构交 [requirements](../xyf-easycode-requirements/SKILL.md)。要求、代码或范围变化后复查。

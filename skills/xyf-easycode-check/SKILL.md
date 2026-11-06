@@ -26,7 +26,7 @@ Read-only review: do not modify business code, the architecture, or any state; d
 | Methods and interfaces | Purpose and inputs/outputs of `interfaces`; verify step by step against the order and conditions of `flow` and the error handling in `errors` |
 | Calls and events | Verify calls, data, and the direction and parameters of `events` against `dependencies` and `flow`; `relations` only helps locate things |
 | Test contents | `tests.steps/expected` turned into normal, boundary, and error cases with explicit assertions; located in `docs/xyf-easycode/tests/` |
-| Code comments | Per the [code conventions](../xyf-easycode-code/SKILL.md#2-write-code-and-tests): at least 1 comment line per 5 lines, content matching the implementation, language consistent with the architecture web page |
+| Code comments | Per the [code conventions](../xyf-easycode-code/SKILL.md#2-write-code-and-tests): at least 1 comment line per 5 lines, content matching the implementation, with template sentences and restated code not counted, language consistent with the architecture web page |
 
 4. **Find evidence**: Follow the entry points, registrations, calls, and data flow to locate the implementation, recording paths and line numbers. Whatever cannot be found is listed as missing; never judge conformance by names, comments, diagram states, or passing tests.
 5. **Check everything before concluding**: Follow up on omissions and affected parts; list whatever cannot be clarified as unverified; needed architecture changes go to [requirements](../xyf-easycode-requirements/SKILL.md). Re-review after requirements, code, or scope change.

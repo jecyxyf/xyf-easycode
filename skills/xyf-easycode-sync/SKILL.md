@@ -1,6 +1,7 @@
 ---
 name: xyf-easycode-sync
-description: After code changes, lists the architecture differences against the actual code and, once confirmed, writes only intentional changes back into the software architecture JSON; wrong code is not written back, and code is never changed. Use when the architecture lags behind the actual code after code changes.
+description: After code changes, lists the architecture differences against the actual code and, once confirmed, writes only intentional changes back into the software architecture JSON; wrong code is not written back, and code is never changed. Manual trigger by the user only; agents and other skills must never invoke it automatically.
+disable-model-invocation: true
 ---
 
 # Architecture Sync
@@ -8,6 +9,8 @@ description: After code changes, lists the architecture differences against the 
 Acting as a senior software architect, once code changes are complete, sync `docs/xyf-easycode/html/software_architecture.js` to the actual code, so the next check does not judge intentional changes as nonconforming. The code is the source of truth; this skill changes only the architecture JSON — never the code — and does not run programs or tests.
 
 **Rule**: The paths above are relative to the target project. After the project is determined, re-read `<project>/docs/xyf-easycode/PromptsRules.md` before starting and before every batch of writes; if it is missing, first read the [template](../xyf-easycode-install/PromptsRules.md) and explain, then hand over to [install](../xyf-easycode-install/SKILL.md) to fill it in per authorization; if reading fails, pause.
+
+**Trigger restriction**: Only the user may trigger this skill manually; agents and other skills must not invoke it automatically, and when a sync seems needed, only suggest it to the user.
 
 ## How to Sync
 

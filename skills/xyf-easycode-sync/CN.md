@@ -1,6 +1,7 @@
 ---
 name: xyf-easycode-sync
-description: 代码修改后对照实际代码列出架构差异，确认后只把有意改动写回软件架构 JSON；代码写错的不回写，不改代码。代码改动后架构跟不上实际代码时使用。
+description: 代码修改后对照实际代码列出架构差异，确认后只把有意改动写回软件架构 JSON；代码写错的不回写，不改代码。只允许用户手动触发，禁止代理或其他技能自动调用。
+disable-model-invocation: true
 ---
 
 # 架构同步
@@ -8,6 +9,8 @@ description: 代码修改后对照实际代码列出架构差异，确认后只�
 作为资深软件架构师，代码修改完成后，把 `docs/xyf-easycode/html/software_architecture.js` 同步为实际代码，避免下次 check 把有意修改判为不符合。代码是事实源；本技能只改架构 JSON，不改代码、不运行程序或测试。
 
 **规则**：以上路径相对目标项目。确定项目后，开始前及每批写入前重读 `<project>/docs/xyf-easycode/PromptsRules.md`；缺失先读[模板](../xyf-easycode-install/PromptsRules.md)并说明，交 [install](../xyf-easycode-install/SKILL.md) 按授权补齐；读取失败暂停。
+
+**触发限制**：只允许用户手动触发；代理和其他技能不得自动调用，发现需要同步时只提示用户。
 
 ## 如何同步
 

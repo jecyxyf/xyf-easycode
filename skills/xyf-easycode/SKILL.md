@@ -21,7 +21,7 @@ Choose the skill by the result the user wants, and read only the selected skill'
 | Deploy the architecture web page or fill in PromptsRules.md | [xyf-easycode-install](../xyf-easycode-install/SKILL.md) |
 | Compare architecture and code for differences; produce a review report | [xyf-easycode-check](../xyf-easycode-check/SKILL.md) |
 | Plan, code, test, and deliver per the architecture and the review report | [xyf-easycode-code](../xyf-easycode-code/SKILL.md) |
-| After code changes, sync the architecture JSON to the actual code | [xyf-easycode-sync](../xyf-easycode-sync/SKILL.md) |
+| After code changes, sync the architecture JSON to the actual code (manual user trigger only) | [xyf-easycode-sync](../xyf-easycode-sync/SKILL.md) |
 | Read-only review of new defects introduced by specified code changes | [review-agent](../review-agent/SKILL.md) |
 
 ## Workflow
@@ -30,4 +30,4 @@ Choose the skill by the result the user wants, and read only the selected skill'
 1. **Requirements discussion and architecture design**: Call requirements, discuss the requirements, and after confirmation generate or update the architecture file.
 2. **Difference review**: Call check to compare the architecture with the code and produce a review report listing missing items and differences.
 3. **Code development**: Call code. The main agent splits the work per the report; after user confirmation, subagents write code and tests module by module. Each module is first checked against the architecture with check, then reviewed for defects with review-agent; problems go back to the subagent to fix, then are reviewed again. After all modules pass, run an overall review and integration testing. Work is complete only when the review report shows every item meets the requirements.
-4. **Architecture sync**: code does not call sync. When code was changed outside this workflow and the architecture lags behind the actual code, the user calls sync separately.
+4. **Architecture sync**: code does not call sync. When code was changed outside this workflow and the architecture lags behind the actual code, suggest that the user trigger sync manually.
