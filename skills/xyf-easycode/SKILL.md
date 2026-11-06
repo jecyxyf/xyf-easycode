@@ -1,8 +1,6 @@
 ---
 name: xyf-easycode
-description: Selects and chains EasyCode skills (requirements design, web installation, content review, code development, and defect review) according to the user's goals.
-metadata:
-  version: "0.0.1"
+description: Selects and chains EasyCode skills (requirements design, web installation, content review, code development, architecture sync, and defect review) according to the user's goals. Use when the user mentions EasyCode or the software architecture workflow, or when it is unclear which EasyCode skill fits the task.
 ---
 
 # XYF EasyCode Main Skill
@@ -21,8 +19,8 @@ Choose the skill by the result the user wants, and read only the selected skill'
 | --- | --- |
 | Discuss requirements; generate or update the software architecture file | [xyf-easycode-requirements](../xyf-easycode-requirements/SKILL.md) |
 | Deploy the architecture web page or fill in PromptsRules.md | [xyf-easycode-install](../xyf-easycode-install/SKILL.md) |
-| Compare architecture and code for differences; produce a development plan | [xyf-easycode-check](../xyf-easycode-check/SKILL.md) |
-| Code per the architecture and the confirmed plan to complete features | [xyf-easycode-code](../xyf-easycode-code/SKILL.md) |
+| Compare architecture and code for differences; produce a review report | [xyf-easycode-check](../xyf-easycode-check/SKILL.md) |
+| Plan, code, test, and deliver per the architecture and the review report | [xyf-easycode-code](../xyf-easycode-code/SKILL.md) |
 | After code changes, sync the architecture JSON to the actual code | [xyf-easycode-sync](../xyf-easycode-sync/SKILL.md) |
 | Read-only review of new defects introduced by specified code changes | [review-agent](../review-agent/SKILL.md) |
 
@@ -30,5 +28,6 @@ Choose the skill by the result the user wants, and read only the selected skill'
 
 0. **Install the web page**: If the project does not yet have `docs/xyf-easycode/html/` or `PromptsRules.md`, first call install to fill them in per authorization.
 1. **Requirements discussion and architecture design**: Call requirements, discuss the requirements, and after confirmation generate or update the architecture file.
-2. **Difference review and plan**: Call check, compare the architecture with the code to find differences, produce a development plan, and hand it to the user for confirmation.
-3. **Code development and delivery**: Call code to implement, test, review, fix, and deliver per the architecture and the plan; before delivery, use sync to align the architecture with the actual code. review-agent reviews this phase's code for defects.
+2. **Difference review**: Call check to compare the architecture with the code and produce a review report listing missing items and differences.
+3. **Code development**: Call code. The main agent splits the work per the report; after user confirmation, subagents write code and tests module by module. Each module is first checked against the architecture with check, then reviewed for defects with review-agent; problems go back to the subagent to fix, then are reviewed again. After all modules pass, run an overall review and integration testing. Work is complete only when the review report shows every item meets the requirements.
+4. **Architecture sync**: code does not call sync. When code was changed outside this workflow and the architecture lags behind the actual code, the user calls sync separately.

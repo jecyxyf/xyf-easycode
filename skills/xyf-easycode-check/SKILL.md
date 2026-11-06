@@ -1,6 +1,6 @@
 ---
 name: xyf-easycode-check
-description: Reviews code and test contents against the software architecture, outputs missing items, mismatches, and evidence, and saves the review report per authorization; does not modify business code or the architecture, and does not run programs or tests.
+description: Reviews code and test contents against the software architecture, outputs missing items, mismatches, and evidence, and saves the review report per authorization; does not modify business code or the architecture, and does not run programs or tests. Use to find differences before development and to accept work after development.
 ---
 
 # Content Review

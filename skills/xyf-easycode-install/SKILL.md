@@ -1,6 +1,6 @@
 ---
 name: xyf-easycode-install
-description: Installs the software architecture web page into a project, fills in missing web files, and keeps existing data and settings; does not install the skill package or design the project architecture.
+description: Installs the software architecture web page and the shared PromptsRules.md rules into a project, filling in only missing files and keeping existing data and settings; does not install the skill package or design the project architecture. Use when the project does not yet have the architecture web page or the rules file.
 ---
 
 # Install the Architecture Web Page into a Project

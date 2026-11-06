@@ -1,6 +1,6 @@
 ---
 name: review-agent
-description: Read-only review of specified code changes (uncommitted modifications, a diff against a base branch, a specific commit, or custom requirements), finding all defects introduced by the changes that the author would fix. Use when another agent delegates the review of code changes.
+description: Read-only review of specified code changes (uncommitted modifications, a diff against a base branch, a specific commit, or custom requirements), finding all defects introduced by the changes that the author would fix. Use when reviewing code during development, or when the user asks to review code changes.
 ---
 
 # Defect Review

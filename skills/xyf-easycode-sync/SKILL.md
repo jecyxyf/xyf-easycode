@@ -1,6 +1,6 @@
 ---
 name: xyf-easycode-sync
-description: After code changes, lists the architecture differences against the actual code and, once confirmed, updates only the software architecture JSON — never the code.
+description: After code changes, lists the architecture differences against the actual code and, once confirmed, writes only intentional changes back into the software architecture JSON; wrong code is not written back, and code is never changed. Use when the architecture lags behind the actual code after code changes.
 ---
 
 # Architecture Sync
